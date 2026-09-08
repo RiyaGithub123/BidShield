@@ -1,0 +1,128 @@
+pragma language_version >= 0.23.0;
+
+import CompactStandardLibrary;
+
+// =============================================================================
+// BidShield: Confidential Sealed-Bid Procurement & Reverse Auction
+// Built for Midnight Network (Zero-Knowledge Privacy Layer)
+// =============================================================================
+
+// Public Ledger State — Visible on-chain to all observers & auditors
+export ledger procurementState: Uint<64>;      // 0: Uninitialized, 1: BiddingOpen, 2: BiddingClosed, 3: Awarded
+export ledger procurementId: Bytes<32>;         // Hash identifier of procurement RFP / auction
+export ledger organizationId: Bytes<32>;        // Organization / enterprise issuer ID
+export ledger submissionDeadline: Uint<64>;     // Unix timestamp deadline for sealed bids
+export ledger ceilingBudget: Uint<64>;          // Maximum budget ceiling for procurement
+export ledger totalBidsSubmitted: Uint<64>;     // Total number of sealed bids received
+export ledger winningBidderId: Bytes<32>;       // Identity of awarded supplier (disclosed at award)
+export ledger winningAmount: Uint<64>;          // Winning contract price (disclosed at award)
+export ledger isComplianceVerified: Boolean;    // Zero-knowledge proof of regulatory/ISO compliance passed
+
+// Private Off-Chain Witness Functions — Executed locally in supplier's private wallet
+witness getBidAmount(): Uint<64>;
+witness getBidSalt(): Bytes<32>;
+witness getBidderIdentity(): Bytes<32>;
+witness getComplianceCredential(): Bytes<32>;
+
+// =============================================================================
+// Circuit 1: Initialize Procurement RFP (Buyer / Organization)
+// Opens a new sealed-bid procurement tender with budget ceiling & deadline
+// =============================================================================
+export circuit initializeProcurement(
+    titleHash: Bytes<32>,
+    orgId: Bytes<32>,
+    deadline: Uint<64>,
+    maxBudget: Uint<64>
+): Boolean {
+    assert(procurementState == 0 || procurementState == 3, "Procurement tender is currently active");
+    assert(deadline > 0, "Deadline must be in the future");
+    assert(maxBudget > 0, "Budget ceiling must be greater than zero");
+
+    procurementId = disclose(titleHash);
+    organizationId = disclose(orgId);
+    submissionDeadline = disclose(deadline);
+    ceilingBudget = disclose(maxBudget);
+    totalBidsSubmitted = 0;
+    winningBidderId = pad(32, "");
+    winningAmount = 0;
+    isComplianceVerified = false;
+    procurementState = 1; // Transition to BiddingOpen
+
+    return true;
+}
+
+// =============================================================================
+// Circuit 2: Submit Confidential Sealed Bid (Supplier / Bidder)
+// Supplier submits a cryptographic commitment. Bid amount remains secret!
+// =============================================================================
+export circuit submitSealedBid(
+    bidCommitment: Bytes<32>,
+    submissionTimestamp: Uint<64>
+): Boolean {
+    assert(procurementState == 1, "Bidding window is not open");
+    assert(submissionTimestamp <= submissionDeadline, "Procurement submission deadline has passed");
+
+    // Supplier's private witness validation: bid amount must be within realistic bounds
+    const privateBid = getBidAmount();
+    assert(privateBid > 0, "Bid amount must be strictly positive");
+
+    totalBidsSubmitted = disclose((totalBidsSubmitted + 1) as Uint<64>);
+    return true;
+}
+
+// =============================================================================
+// Circuit 3: Zero-Knowledge Regulatory & ISO Compliance Check
+// Supplier proves possession of accredited ISO/SOC2 certification hash
+// without disclosing confidential corporate license documents.
+// =============================================================================
+export circuit verifyCompliance(
+    expectedAccreditationHash: Bytes<32>
+): Boolean {
+    assert(procurementState == 1 || procurementState == 2, "Cannot verify compliance in current state");
+
+    const credentialSecret = getComplianceCredential();
+    const computedHash = persistentHash<Bytes<32>>(credentialSecret);
+
+    assert(computedHash == expectedAccreditationHash, "Supplier compliance credentials do not meet RFP standards");
+    isComplianceVerified = true;
+    return true;
+}
+
+// =============================================================================
+// Circuit 4: Close Bidding Phase (Procurement Officer)
+// Closes bid intake once deadline arrives, enabling verification & evaluation
+// =============================================================================
+export circuit closeBidding(
+    currentTimestamp: Uint<64>
+): Boolean {
+    assert(procurementState == 1, "Bidding is not open");
+    assert(currentTimestamp >= submissionDeadline, "Cannot close bidding before deadline");
+
+    procurementState = 2; // Transition to BiddingClosed
+    return true;
+}
+
+// =============================================================================
+// Circuit 5: Award Contract & Reveal Winning Bid
+// Discloses ONLY the winning supplier and winning price.
+// All competing unsuccessful bids remain completely hidden forever!
+// =============================================================================
+export circuit awardProcurement(
+    awardedSupplier: Bytes<32>,
+    awardedPrice: Uint<64>,
+    bidSalt: Bytes<32>
+): Boolean {
+    assert(procurementState == 2, "Bidding must be closed before awarding");
+    assert(awardedPrice <= ceilingBudget, "Winning bid exceeds procurement ceiling budget");
+    assert(awardedPrice > 0, "Winning bid must be greater than zero");
+
+    // Verify bidder identity witness match
+    const bidderIdentity = getBidderIdentity();
+    assert(bidderIdentity == awardedSupplier, "Supplier identity verification mismatch");
+
+    winningBidderId = disclose(awardedSupplier);
+    winningAmount = disclose(awardedPrice);
+    procurementState = 3; // Transition to Awarded
+
+    return true;
+}

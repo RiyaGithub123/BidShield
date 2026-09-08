@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+out/
+managed/keys/
+managed/zkir/
+
+# Environment and secrets
+.env
+.env.local
+.env.production
+.midnight-state.json
+.midnight-wallet-state/
+*.seed
+*.key
+
+# Personal challenge progress (not for public repo)
+CHALLENGE_PROGRESS.md
+.agents/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

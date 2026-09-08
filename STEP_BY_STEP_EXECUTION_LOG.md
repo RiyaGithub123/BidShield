@@ -51,7 +51,7 @@ All background commands executed during the development session are cataloged be
 | **task-76** | `wsl -d Ubuntu -e bash -c "~/.local/bin/compact --version"` | Root | **Exit 0**: `compact 0.5.2` | `.system_generated/tasks/task-76.log` |
 | **task-121** | `wsl -d Ubuntu -e bash -c "~/.local/bin/compact compile ..."` | `contract/` | **Exit 0**: `Compiling 5 circuits:` | `.system_generated/tasks/task-121.log` |
 | **task-150** | `npm install` | `contract/` | **Exit 0**: 271 packages installed | `.system_generated/tasks/task-150.log` |
-| **task-177** | `npm run check-balance --prefix contract` | `contract/` | Generated address & synced headers | `.system_generated/tasks/task-177.log` |
+| **task-177** | `npm run check-balance --prefix contract` | `contract/` | **Exit 0**: Derived address & verified faucet requirement | `.system_generated/tasks/task-177.log` |
 | **task-187** | `npm install` | `frontend/` | **Exit 0**: 65 packages installed | `.system_generated/tasks/task-187.log` |
 | **task-254** | `npm run build` | `frontend/` | **Exit 0**: Initial production bundle | `.system_generated/tasks/task-254.log` |
 | **task-267** | `npm run dev --prefix frontend` (Daemon) | `frontend/` | **Running**: Vite dev server on port 5174 | `.system_generated/tasks/task-267.log` |

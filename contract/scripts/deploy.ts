@@ -163,7 +163,7 @@ async function main() {
   console.log('  ✓ Connected to Midnight Substrate node.\n');
 
   console.log('─── 2. Wallet Initialization ───────────────────────────────────\n');
-  const walletCtx = await createWallet({ network, networkConfig, seed: SEED, restore: false });
+  const walletCtx = await createWallet({ network, networkConfig, seed: SEED, restore: true });
   const address = walletCtx.unshieldedKeystore.getBech32Address().toString();
   console.log(`  Wallet Address: ${address}`);
 
@@ -172,19 +172,31 @@ async function main() {
   const syncInterval = setInterval(() => {
     const elapsed = Math.round((Date.now() - syncStart) / 1000);
     process.stdout.write(`\r  ⏳ Syncing... (${elapsed}s elapsed)   `);
-  }, 4000);
+  }, 3000);
 
   const state = await new Promise<any>((resolve, reject) => {
+    let settled = false;
     const sub = walletCtx.wallet.state().subscribe((s) => {
-      if (s.isSynced) {
+      const bal = s.unshielded?.balances?.[unshieldedToken().raw] ?? 0n;
+      if (!settled && (bal > 0n || s.isSynced)) {
+        settled = true;
         sub.unsubscribe();
         resolve(s);
       }
     });
     walletCtx.wallet.waitForSyncedState().then((s) => {
-      sub.unsubscribe();
-      resolve(s);
-    }).catch(reject);
+      if (!settled) {
+        settled = true;
+        sub.unsubscribe();
+        resolve(s);
+      }
+    }).catch((err) => {
+      if (!settled) {
+        settled = true;
+        sub.unsubscribe();
+        reject(err);
+      }
+    });
   });
   clearInterval(syncInterval);
   process.stdout.write('\r  ✓ Synced with network.                                      \n');

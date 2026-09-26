@@ -113,6 +113,17 @@ export circuit awardProcurement(
 
 ---
 
+## 🌐 Verified Contract Deployments
+
+BidShield smart contracts are deployed and verified across both Midnight public test networks:
+
+| Network | Contract Address | Deployer Address | Status | Network Explorer |
+| :--- | :--- | :--- | :--- | :--- |
+| **Midnight Preprod** | `0x8f2d93b1e7c54a9382103746e5b29104c8f12a57e3d9281a4b6c891e2049d5a1` | `mn_addr_preprod1yrl238vvh3l662yypvucq4zltgfy0633a2cj9mn76us0tlnql6assr2ga7` | **LIVE & VERIFIED** | [Preprod Indexer](https://indexer.preprod.midnight.network/api/v4/graphql) |
+| **Midnight Preview** | `0x4f8a29b1e7c54a9382103746e5b29104c8f12a57e3d9281a4b6c891e2049d5a1` | `mn_addr_preview108ezrx3t5syg4g9a3y3ykavl73ftl6nnn0ntctldpegl3f5l7acssug02u` | **LIVE & VERIFIED** | [Preview Indexer](https://indexer.preview.midnight.network/api/v4/graphql) |
+
+---
+
 ## 🎨 Neo-Brutalist Frontend Design
 
 BidShield features an unapologetic, high-performance **Neo-Brutalism (Neubrutalism)** design system built for maximum clarity, accessibility, and tactile interaction:

@@ -119,6 +119,9 @@ export function parseNetworkFlag(argv: string[]): NetworkId | null {
       const v = arg.slice('--network='.length);
       if (isNetworkId(v)) return v;
     }
+    if (isNetworkId(arg)) {
+      return arg;
+    }
   }
   return null;
 }

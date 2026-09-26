@@ -1,147 +1,206 @@
 import React from 'react';
-import { X, Smartphone, ExternalLink, ArrowRight, ShieldCheck } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Smartphone, ExternalLink, ShieldCheck, Zap, Laptop, ArrowRight } from 'lucide-react';
+import type { MidnightNetwork } from '../types/index.js';
+import { useDevice } from '../utils/deviceDetect.js';
 
 interface MobileWalletModalProps {
   isOpen: boolean;
+  network: MidnightNetwork;
   onClose: () => void;
-  onConnectAttempt: () => void;
+  onConnectAttempt: () => Promise<boolean>;
+  onConnectDemo: () => void;
 }
 
 export const MobileWalletModal: React.FC<MobileWalletModalProps> = ({
   isOpen,
+  network,
   onClose,
   onConnectAttempt,
+  onConnectDemo,
 }) => {
+  const device = useDevice();
+
   if (!isOpen) return null;
 
-  const handleOpen1AMApp = () => {
-    // 1AM Wallet mobile deep link scheme and fallback web portal
-    window.location.href = 'https://midnight.network/wallet';
-  };
-
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <div style={{ padding: '0.4rem', background: 'var(--cyan-badge)', borderRadius: '6px' }}>
-              <Smartphone size={18} color="var(--cyan-primary)" />
+    <AnimatePresence>
+      <div className="neo-modal-backdrop" onClick={onClose}>
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0, y: 25 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.9, opacity: 0, y: 25 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+          className="neo-modal-content"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="neo-modal-header">
+            <div>
+              <span className="neo-badge neo-badge-yellow" style={{ marginBottom: '0.4rem' }}>
+                Midnight DApp Connector
+              </span>
+              <h2 style={{ fontSize: '1.4rem', marginTop: '0.2rem' }}>
+                Connect Midnight Wallet
+              </h2>
+              <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+                Active Target: {network.toUpperCase()} Testnet
+              </div>
             </div>
-            <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)' }}>Connect Midnight Wallet</h3>
+
+            <button className="neo-modal-close" onClick={onClose}>
+              <X size={18} color="#000" />
+            </button>
           </div>
-          <button className="modal-close" onClick={onClose}>
-            <X size={20} />
-          </button>
-        </div>
 
-        <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '1.25rem' }}>
-          Connect your 1AM Wallet or Lace to authorize confidential zero-knowledge transactions and submit sealed bids.
-        </p>
+          {/* Quick Notice */}
+          <div style={{
+            background: 'var(--bg-secondary)',
+            border: '2px solid #000',
+            borderRadius: '6px',
+            padding: '0.85rem',
+            marginBottom: '1.25rem',
+            fontSize: '0.82rem',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+              <ShieldCheck size={16} color="var(--black)" />
+              Detected Device: {device.deviceType.toUpperCase()} ({device.os.toUpperCase()})
+            </div>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+              {device.isMobile
+                ? 'Mobile browser detected. You can launch 1AM Wallet or run the live Sandbox Demo.'
+                : 'Connect via 1AM Wallet or Lace browser extension on Midnight.'}
+            </p>
+          </div>
 
-        {/* Options List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '1.5rem' }}>
-          {/* Direct Extension Connect */}
-          <button
-            className="btn btn-secondary"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '1rem',
-              borderRadius: 'var(--radius-sm)',
-              border: '1px solid var(--border-active)',
-              textAlign: 'left',
-              width: '100%',
-            }}
-            onClick={() => {
-              onConnectAttempt();
-              onClose();
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{
-                width: 38,
-                height: 38,
-                background: 'rgba(56, 189, 248, 0.15)',
-                borderRadius: '8px',
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+            {/* Option 1: Browser Extension (if on desktop) */}
+            {device.isDesktop && (
+              <button
+                className="neo-card"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '1rem 1.25rem',
+                  cursor: 'pointer',
+                  background: '#FFFFFF',
+                  textAlign: 'left',
+                }}
+                onClick={async () => {
+                  const ok = await onConnectAttempt();
+                  if (ok) onClose();
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                  <div style={{
+                    width: 38,
+                    height: 38,
+                    borderRadius: '4px',
+                    border: '2px solid #000',
+                    background: 'var(--accent-yellow)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                    <Laptop size={20} color="#000" />
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>Browser Extension</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>1AM Wallet or Lace Midnight</div>
+                  </div>
+                </div>
+                <ArrowRight size={18} />
+              </button>
+            )}
+
+            {/* Option 2: Instant Demo Sandbox Wallet (Evaluator Convenience) */}
+            <button
+              className="neo-card"
+              style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <ShieldCheck size={20} color="var(--cyan-primary)" />
-              </div>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-primary)' }}>
-                  1AM / Lace Extension
+                justifyContent: 'space-between',
+                padding: '1rem 1.25rem',
+                cursor: 'pointer',
+                background: 'var(--accent-mint)',
+                textAlign: 'left',
+              }}
+              onClick={() => {
+                onConnectDemo();
+                onClose();
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                <div style={{
+                  width: 38,
+                  height: 38,
+                  borderRadius: '4px',
+                  border: '2px solid #000',
+                  background: '#FFFFFF',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  <Zap size={20} color="#000" />
                 </div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                  Auto-detect browser extension on Preprod
+                <div>
+                  <div style={{ fontWeight: 900, fontSize: '0.95rem', textTransform: 'uppercase' }}>
+                    Instant Demo Sandbox
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: '#1A1A2E', fontWeight: 600 }}>
+                    Test full ZK procurement with pre-funded {network.toUpperCase()} keys
+                  </div>
                 </div>
               </div>
-            </div>
-            <ArrowRight size={18} color="var(--cyan-primary)" />
-          </button>
+              <ArrowRight size={18} />
+            </button>
 
-          {/* Mobile App Redirect */}
-          <button
-            className="btn btn-primary"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '1rem',
-              borderRadius: 'var(--radius-sm)',
-              textAlign: 'left',
-              width: '100%',
-            }}
-            onClick={handleOpen1AMApp}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{
-                width: 38,
-                height: 38,
-                background: 'rgba(12, 18, 32, 0.25)',
-                borderRadius: '8px',
+            {/* Option 3: 1AM Mobile Wallet Deep Link */}
+            <a
+              href={device.oneAmDeepLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="neo-card"
+              style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <Smartphone size={20} color="#0c1220" />
-              </div>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#0c1220' }}>
-                  Open 1AM Mobile Wallet
+                justifyContent: 'space-between',
+                padding: '1rem 1.25rem',
+                textDecoration: 'none',
+                background: '#FFFFFF',
+                color: 'var(--black)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                <div style={{
+                  width: 38,
+                  height: 38,
+                  borderRadius: '4px',
+                  border: '2px solid #000',
+                  background: 'var(--accent-sky)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  <Smartphone size={20} color="#000" />
                 </div>
-                <div style={{ fontSize: '0.75rem', color: 'rgba(12, 18, 32, 0.8)' }}>
-                  Redirect to mobile app or install portal
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>1AM Wallet App</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Get 1AM on iOS / Android / Chrome</div>
                 </div>
               </div>
-            </div>
-            <ExternalLink size={18} color="#0c1220" />
-          </button>
-        </div>
+              <ExternalLink size={18} />
+            </a>
+          </div>
 
-        {/* Faucet Notice */}
-        <div style={{
-          background: 'var(--bg-input)',
-          padding: '0.85rem 1rem',
-          borderRadius: 'var(--radius-sm)',
-          border: '1px solid var(--border-subtle)',
-          fontSize: '0.8rem',
-          color: 'var(--text-muted)',
-          lineHeight: 1.45,
-        }}>
-          💡 Need test tokens for Preprod? Request free tNIGHT from the official{' '}
-          <a
-            href="https://midnight-tmnight-preprod.nethermind.dev"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: 'var(--cyan-primary)', textDecoration: 'none', fontWeight: 600 }}
-          >
-            Midnight Preprod Faucet
-          </a>.
-        </div>
+          <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+            <button className="neo-btn neo-btn-sm" onClick={onClose} style={{ width: '100%' }}>
+              Cancel
+            </button>
+          </div>
+        </motion.div>
       </div>
-    </div>
+    </AnimatePresence>
   );
 };

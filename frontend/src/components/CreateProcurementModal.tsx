@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, Sparkles, AlertCircle, RefreshCw } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Sparkles, AlertCircle } from 'lucide-react';
 
 interface CreateProcurementModalProps {
   onClose: () => void;
@@ -17,193 +18,219 @@ export const CreateProcurementModal: React.FC<CreateProcurementModalProps> = ({
   onClose,
   onCreate,
 }) => {
-  const [title, setTitle] = useState('');
-  const [organization, setOrganization] = useState('');
-  const [description, setDescription] = useState('');
-  const [ceilingBudget, setCeilingBudget] = useState('');
-  const [deadlineDays, setDeadlineDays] = useState('7');
-  const [complianceStandard, setComplianceStandard] = useState('ISO-27001 / SOC2 Type II Certified');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // Pure empty states by default (NO prefilled dummy values)
+  const [title, setTitle] = useState<string>('');
+  const [organization, setOrganization] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [ceilingBudget, setCeilingBudget] = useState<string>('');
+  const [deadlineDays, setDeadlineDays] = useState<string>('5');
+  const [complianceStandard, setComplianceStandard] = useState<string>('ISO-27001 / SOC2 Type II Certified');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleFillSample = () => {
+    setTitle('Quantum-Resistant Enclave HSM Modules 2026');
+    setOrganization('Zero-Knowledge Infrastructure DAO');
+    setDescription('Procurement of high-assurance hardware security enclaves with remote attestation capabilities.');
+    setCeilingBudget('500000');
+    setDeadlineDays('7');
+    setComplianceStandard('FIPS 140-3 Level 4 Cryptographic Standard');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const budget = parseFloat(ceilingBudget);
-
-    if (!title.trim() || !organization.trim() || !description.trim()) {
-      setError('Please fill in all required procurement details.');
-      return;
-    }
-
-    if (isNaN(budget) || budget <= 0) {
-      setError('Budget ceiling must be greater than zero.');
-      return;
-    }
-
     setError(null);
-    setIsSubmitting(true);
+
+    const budgetNum = Number(ceilingBudget);
+    const daysNum = Number(deadlineDays);
+
+    if (!title.trim() || !organization.trim()) {
+      setError('Title and Organization are required fields.');
+      return;
+    }
+
+    if (!budgetNum || budgetNum <= 0) {
+      setError('Please provide a strictly positive ceiling budget.');
+      return;
+    }
 
     try {
-      await onCreate(
-        title.trim(),
-        organization.trim(),
-        description.trim(),
-        budget,
-        parseInt(deadlineDays, 10),
-        complianceStandard
-      );
+      setIsSubmitting(true);
+      await onCreate(title, organization, description, budgetNum, daysNum, complianceStandard);
       onClose();
     } catch (err: any) {
-      setError(err?.message || 'Failed to initialize procurement RFP on-chain.');
+      setError(err?.message || 'Failed to initialize procurement tender.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
-        <div className="modal-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <div style={{ padding: '0.4rem', background: 'var(--cyan-badge)', borderRadius: '6px' }}>
-              <Sparkles size={18} color="var(--cyan-primary)" />
+    <AnimatePresence>
+      <div className="neo-modal-backdrop" onClick={onClose}>
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0, y: 25 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.9, opacity: 0, y: 25 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+          className="neo-modal-content"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="neo-modal-header">
+            <div>
+              <span className="neo-badge neo-badge-yellow" style={{ marginBottom: '0.4rem' }}>
+                Circuit: initializeProcurement()
+              </span>
+              <h2 style={{ fontSize: '1.4rem', marginTop: '0.2rem' }}>
+                Publish Procurement RFP
+              </h2>
+              <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+                Open a new sealed-bid tender on Midnight
+              </div>
             </div>
-            <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>Create Procurement RFP</h3>
-          </div>
-          <button className="modal-close" onClick={onClose}>
-            <X size={20} />
-          </button>
-        </div>
 
-        <form onSubmit={handleSubmit}>
-          {/* RFP Title */}
-          <div className="form-group">
-            <label className="form-label" htmlFor="rfpTitle">Procurement Title / Tender Reference</label>
-            <input
-              id="rfpTitle"
-              type="text"
-              className="form-control"
-              placeholder="e.g. NextGen Zero-Knowledge Infrastructure Audit"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-              autoFocus
-            />
+            <button className="neo-modal-close" onClick={onClose}>
+              <X size={18} color="#000" />
+            </button>
           </div>
 
-          {/* Organization */}
-          <div className="form-group">
-            <label className="form-label" htmlFor="orgName">Issuing Enterprise / Organization</label>
-            <input
-              id="orgName"
-              type="text"
-              className="form-control"
-              placeholder="e.g. Global FinTech Procurement Alliance"
-              value={organization}
-              onChange={(e) => setOrganization(e.target.value)}
-              required
-            />
-          </div>
-
-          {/* Description */}
-          <div className="form-group">
-            <label className="form-label" htmlFor="rfpDesc">Scope of Work & Requirements</label>
-            <textarea
-              id="rfpDesc"
-              className="form-control"
-              placeholder="Detail the technical specifications, delivery milestones, and evaluation criteria..."
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
-          </div>
-
-          {/* Budget Ceiling & Deadline Row */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-            <div className="form-group">
-              <label className="form-label" htmlFor="ceilingBudget">Ceiling Budget ($ USD / tNIGHT)</label>
+          <form onSubmit={handleSubmit}>
+            {/* Tender Title */}
+            <div className="neo-form-group">
+              <label className="neo-form-label">Procurement RFP Title *</label>
               <input
-                id="ceilingBudget"
-                type="number"
-                className="form-control"
-                placeholder="e.g. 500000"
-                value={ceilingBudget}
-                onChange={(e) => setCeilingBudget(e.target.value)}
+                type="text"
+                className="neo-input"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="e.g. Zero-Knowledge Cryptographic Audit 2026..."
                 required
-                min="1"
+                autoFocus
               />
             </div>
 
-            <div className="form-group">
-              <label className="form-label" htmlFor="deadlineDays">Submission Window</label>
+            {/* Issuing Organization */}
+            <div className="neo-form-group">
+              <label className="neo-form-label">Issuing Organization / Agency *</label>
+              <input
+                type="text"
+                className="neo-input"
+                value={organization}
+                onChange={(e) => setOrganization(e.target.value)}
+                placeholder="e.g. Midnight Foundation / Global FinTech DAO..."
+                required
+              />
+            </div>
+
+            {/* Scope of Work */}
+            <div className="neo-form-group">
+              <label className="neo-form-label">Scope of Work & Requirements</label>
+              <textarea
+                className="neo-input neo-textarea"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Describe procurement specifications, deliverables, and SLAs..."
+              />
+            </div>
+
+            {/* Ceiling Budget & Deadline Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="neo-form-group">
+                <label className="neo-form-label">Ceiling Budget (tNIGHT) *</label>
+                <input
+                  type="number"
+                  className="neo-input"
+                  value={ceilingBudget}
+                  onChange={(e) => setCeilingBudget(e.target.value)}
+                  placeholder="e.g. 450000"
+                  required
+                />
+              </div>
+
+              <div className="neo-form-group">
+                <label className="neo-form-label">Intake Window (Days) *</label>
+                <input
+                  type="number"
+                  className="neo-input"
+                  value={deadlineDays}
+                  onChange={(e) => setDeadlineDays(e.target.value)}
+                  min="1"
+                  max="60"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Accreditation Standard */}
+            <div className="neo-form-group">
+              <label className="neo-form-label">Mandated ZK Compliance Gate</label>
               <select
-                id="deadlineDays"
-                className="form-control"
-                value={deadlineDays}
-                onChange={(e) => setDeadlineDays(e.target.value)}
+                className="neo-input"
+                value={complianceStandard}
+                onChange={(e) => setComplianceStandard(e.target.value)}
+                style={{ cursor: 'pointer' }}
               >
-                <option value="3">3 Days</option>
-                <option value="5">5 Days</option>
-                <option value="7">7 Days (Standard)</option>
-                <option value="14">14 Days</option>
-                <option value="30">30 Days</option>
+                <option value="ISO-27001 / SOC2 Type II Certified">ISO-27001 / SOC2 Type II Certified</option>
+                <option value="PCI-DSS & SOC2 Certified">PCI-DSS & SOC2 Certified</option>
+                <option value="FIPS 140-3 Level 4 Cryptographic Standard">FIPS 140-3 Level 4 Cryptographic Standard</option>
+                <option value="W3C Verifiable Credentials Standard">W3C Verifiable Credentials Standard</option>
               </select>
             </div>
-          </div>
 
-          {/* Compliance Standard */}
-          <div className="form-group">
-            <label className="form-label" htmlFor="complianceStandard">Required Regulatory / ISO Standard</label>
-            <select
-              id="complianceStandard"
-              className="form-control"
-              value={complianceStandard}
-              onChange={(e) => setComplianceStandard(e.target.value)}
-            >
-              <option value="ISO-27001 / SOC2 Type II Certified">ISO-27001 / SOC2 Type II Certified</option>
-              <option value="PCI-DSS & SOC2 Certified">PCI-DSS & SOC2 Certified</option>
-              <option value="FIPS 140-3 Level 4 Cryptographic Standard">FIPS 140-3 Level 4 Cryptographic Standard</option>
-              <option value="W3C Verifiable Credentials Standard">W3C Verifiable Credentials Standard</option>
-              <option value="HIPAA & Healthcare Data Security">HIPAA & Healthcare Data Security</option>
-            </select>
-          </div>
-
-          {error && (
-            <div style={{
-              color: 'var(--rose-danger)',
-              fontSize: '0.82rem',
-              marginBottom: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-            }}>
-              <AlertCircle size={15} />
-              {error}
+            {/* Non-intrusive Preset Button */}
+            <div style={{ marginBottom: '1.25rem' }}>
+              <button
+                type="button"
+                className="neo-chip"
+                onClick={handleFillSample}
+              >
+                Fill RFP Template
+              </button>
             </div>
-          )}
 
-          {/* Submit Actions */}
-          <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
-            <button type="button" className="btn btn-secondary" style={{ flex: 1 }} onClick={onClose} disabled={isSubmitting}>
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-primary" style={{ flex: 2 }} disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <RefreshCw size={16} className="spinning" />
-                  Publishing On-Chain...
-                </>
-              ) : (
-                <>
-                  <Sparkles size={16} />
-                  Deploy RFP Tender
-                </>
-              )}
-            </button>
-          </div>
-        </form>
+            {error && (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.75rem',
+                background: 'var(--accent-coral)',
+                border: '2px solid #000',
+                borderRadius: '4px',
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                color: '#000',
+                marginBottom: '1rem',
+              }}>
+                <AlertCircle size={16} />
+                {error}
+              </div>
+            )}
+
+            {/* Submit Action */}
+            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
+              <button
+                type="button"
+                className="neo-btn"
+                style={{ flex: 1 }}
+                onClick={onClose}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="neo-btn neo-btn-primary"
+                style={{ flex: 2 }}
+                disabled={isSubmitting || !title || !ceilingBudget}
+              >
+                <Sparkles size={16} />
+                {isSubmitting ? 'Broadcasting Tender...' : 'Publish RFP Tender'}
+              </button>
+            </div>
+          </form>
+        </motion.div>
       </div>
-    </div>
+    </AnimatePresence>
   );
 };

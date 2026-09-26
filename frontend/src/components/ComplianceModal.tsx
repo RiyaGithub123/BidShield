@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { X, ShieldCheck, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, ShieldCheck, CheckCircle2, AlertCircle, Key } from 'lucide-react';
 import type { ProcurementTender } from '../types/index.js';
 
 interface ComplianceModalProps {
-  tender: ProcurementTender | null;
+  tender: ProcurementTender;
   onClose: () => void;
-  onVerify: (tenderId: string, secretKey: string) => Promise<{ verified: boolean }>;
+  onVerify: (tenderId: string, credentialSecret: string) => Promise<{ verified: boolean; accreditationHash: string }>;
 }
 
 export const ComplianceModal: React.FC<ComplianceModalProps> = ({
@@ -13,186 +14,166 @@ export const ComplianceModal: React.FC<ComplianceModalProps> = ({
   onClose,
   onVerify,
 }) => {
-  if (!tender) return null;
-
-  const [secretKey, setSecretKey] = useState('');
-  const [isVerifying, setIsVerifying] = useState(false);
-  const [result, setResult] = useState<{ verified: boolean } | null>(null);
+  const [credentialSecret, setCredentialSecret] = useState<string>('');
+  const [isVerifying, setIsVerifying] = useState<boolean>(false);
+  const [result, setResult] = useState<{ verified: boolean; accreditationHash: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!secretKey.trim()) {
-      setError('Please provide your confidential accreditation key.');
-      return;
-    }
-
-    setError(null);
-    setIsVerifying(true);
+    if (!credentialSecret.trim()) return;
 
     try {
-      const res = await onVerify(tender.id, secretKey.trim());
+      setIsVerifying(true);
+      setError(null);
+      const res = await onVerify(tender.id, credentialSecret.trim());
       setResult(res);
     } catch (err: any) {
-      setError(err?.message || 'Verification failure.');
+      setError(err?.message || 'Verification execution failed.');
     } finally {
       setIsVerifying(false);
     }
   };
 
-  const handleUseStandardCredential = () => {
-    setSecretKey(tender.complianceStandard);
-  };
-
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
-        <div className="modal-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <div style={{ padding: '0.4rem', background: 'var(--emerald-badge)', borderRadius: '6px' }}>
-              <ShieldCheck size={18} color="var(--emerald-success)" />
+    <AnimatePresence>
+      <div className="neo-modal-backdrop" onClick={onClose}>
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0, y: 25 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.9, opacity: 0, y: 25 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+          className="neo-modal-content"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="neo-modal-header">
+            <div>
+              <span className="neo-badge neo-badge-violet" style={{ marginBottom: '0.4rem' }}>
+                Circuit: verifyCompliance()
+              </span>
+              <h2 style={{ fontSize: '1.4rem', marginTop: '0.2rem' }}>
+                Prove Accreditation in ZK
+              </h2>
+              <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+                Tender: {tender.title}
+              </div>
             </div>
-            <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>Zero-Knowledge Compliance</h3>
-          </div>
-          <button className="modal-close" onClick={onClose}>
-            <X size={20} />
-          </button>
-        </div>
 
-        {/* Required Standard */}
-        <div style={{
-          background: 'var(--bg-input)',
-          padding: '1rem',
-          borderRadius: 'var(--radius-sm)',
-          marginBottom: '1.25rem',
-          border: '1px solid var(--border-subtle)',
-        }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-            RFP Required Standard
+            <button className="neo-modal-close" onClick={onClose}>
+              <X size={18} color="#000" />
+            </button>
           </div>
-          <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--emerald-success)', marginTop: '0.2rem' }}>
-            {tender.complianceStandard}
-          </div>
+
+          {/* Mandated Standard Box */}
           <div style={{
-            fontSize: '0.72rem',
-            color: 'var(--text-muted)',
-            fontFamily: 'var(--font-mono)',
-            marginTop: '0.4rem',
-            wordBreak: 'break-all',
+            background: 'var(--bg-secondary)',
+            border: '2px solid #000',
+            borderRadius: '6px',
+            padding: '0.85rem',
+            marginBottom: '1.25rem',
+            fontSize: '0.82rem',
           }}>
-            Hash: {tender.complianceStandardHash}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+              <ShieldCheck size={15} color="var(--black)" />
+              Mandated RFP Standard
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 800, fontSize: '0.9rem' }}>
+              {tender.complianceStandard}
+            </div>
+            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', marginTop: '0.25rem', wordBreak: 'break-all' }}>
+              Standard Hash: {tender.complianceStandardHash}
+            </div>
           </div>
-        </div>
 
-        {/* ZK Explanation */}
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '1.25rem' }}>
-          This circuit computes a zero-knowledge membership proof confirming your enterprise holds the mandated accreditation without exposing your private company license keys to competitors or auditors.
-        </p>
+          <form onSubmit={handleVerify}>
+            <div className="neo-form-group">
+              <label className="neo-form-label">
+                Private Supplier Accreditation Key *
+              </label>
+              <input
+                type="text"
+                className="neo-input"
+                value={credentialSecret}
+                onChange={(e) => setCredentialSecret(e.target.value)}
+                placeholder="Enter private credential token..."
+                required
+                autoFocus
+              />
 
-        <form onSubmit={handleVerify}>
-          <div className="form-group">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <label className="form-label" htmlFor="supplierCert">Supplier Accreditation Key / Credential</label>
+              {/* Preset helper chip */}
+              <div className="neo-input-helpers">
+                <span style={{ fontSize: '0.72rem', fontWeight: 700, alignSelf: 'center' }}>
+                  Helper:
+                </span>
+                <button
+                  type="button"
+                  className="neo-chip"
+                  onClick={() => setCredentialSecret(tender.complianceStandard)}
+                >
+                  Use Matching Standard Token
+                </button>
+              </div>
+            </div>
+
+            {result && (
+              <div style={{
+                padding: '0.85rem',
+                border: '2.5px solid #000',
+                borderRadius: '6px',
+                boxShadow: '3px 3px 0px #000',
+                marginBottom: '1.25rem',
+                background: result.verified ? 'var(--accent-mint)' : 'var(--accent-coral)',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.88rem' }}>
+                  {result.verified ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
+                  {result.verified ? 'ZK Compliance Verified!' : 'Accreditation Mismatch'}
+                </div>
+                <div style={{ fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                  {result.verified
+                    ? 'Mathematical proof valid! The smart contract confirms you satisfy requirements without viewing proprietary credentials.'
+                    : 'The credential hash does not match the mandated RFP standard.'}
+                </div>
+              </div>
+            )}
+
+            {error && (
+              <div style={{
+                padding: '0.75rem',
+                background: 'var(--accent-coral)',
+                border: '2px solid #000',
+                borderRadius: '4px',
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                color: '#000',
+                marginBottom: '1rem',
+              }}>
+                {error}
+              </div>
+            )}
+
+            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
               <button
                 type="button"
-                onClick={handleUseStandardCredential}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--cyan-primary)',
-                  fontSize: '0.75rem',
-                  cursor: 'pointer',
-                }}
+                className="neo-btn"
+                style={{ flex: 1 }}
+                onClick={onClose}
               >
-                Insert Verified Key
+                Close
+              </button>
+              <button
+                type="submit"
+                className="neo-btn neo-btn-mint"
+                style={{ flex: 2 }}
+                disabled={isVerifying || !credentialSecret}
+              >
+                <Key size={16} />
+                {isVerifying ? 'Generating ZK Proof...' : 'Verify in Zero-Knowledge'}
               </button>
             </div>
-            <input
-              id="supplierCert"
-              type="text"
-              className="form-control"
-              placeholder="e.g. ISO-27001-Enterprise-Verification-Secret-2026"
-              value={secretKey}
-              onChange={(e) => setSecretKey(e.target.value)}
-              required
-              autoFocus
-            />
-          </div>
-
-          {result && (
-            <div style={{
-              background: result.verified ? 'rgba(16, 185, 129, 0.12)' : 'rgba(244, 63, 94, 0.12)',
-              border: `1px solid ${result.verified ? 'var(--emerald-success)' : 'var(--rose-danger)'}`,
-              borderRadius: 'var(--radius-sm)',
-              padding: '1rem',
-              marginBottom: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.65rem',
-            }}>
-              {result.verified ? (
-                <>
-                  <CheckCircle2 size={20} color="var(--emerald-success)" />
-                  <div>
-                    <div style={{ fontWeight: 700, color: 'var(--emerald-success)', fontSize: '0.92rem' }}>
-                      ZK Compliance Proof Verified!
-                    </div>
-                    <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-                      Credential satisfies all RFP security standards.
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <AlertCircle size={20} color="var(--rose-danger)" />
-                  <div>
-                    <div style={{ fontWeight: 700, color: 'var(--rose-danger)', fontSize: '0.92rem' }}>
-                      Accreditation Mismatch
-                    </div>
-                    <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-                      Credential hash does not match the mandated standard.
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-
-          {error && (
-            <div style={{
-              color: 'var(--rose-danger)',
-              fontSize: '0.82rem',
-              marginBottom: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-            }}>
-              <AlertCircle size={15} />
-              {error}
-            </div>
-          )}
-
-          <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
-            <button type="button" className="btn btn-secondary" style={{ flex: 1 }} onClick={onClose} disabled={isVerifying}>
-              Close
-            </button>
-            <button type="submit" className="btn btn-cyan" style={{ flex: 2 }} disabled={isVerifying}>
-              {isVerifying ? (
-                <>
-                  <RefreshCw size={16} className="spinning" />
-                  Evaluating ZK Circuit...
-                </>
-              ) : (
-                <>
-                  <ShieldCheck size={16} />
-                  Prove Credential
-                </>
-              )}
-            </button>
-          </div>
-        </form>
+          </form>
+        </motion.div>
       </div>
-    </div>
+    </AnimatePresence>
   );
 };

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { X, Award, AlertCircle, RefreshCw } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Award, AlertCircle, Lock } from 'lucide-react';
 import type { ProcurementTender } from '../types/index.js';
-import { formatCurrency } from '../utils/crypto.js';
+import { generateRandomSalt, formatCurrency } from '../utils/crypto.js';
 
 interface AwardModalProps {
-  tender: ProcurementTender | null;
+  tender: ProcurementTender;
   onClose: () => void;
   onAward: (tenderId: string, supplier: string, price: number, salt: string) => Promise<void>;
 }
@@ -14,145 +15,173 @@ export const AwardModal: React.FC<AwardModalProps> = ({
   onClose,
   onAward,
 }) => {
-  if (!tender) return null;
-
-  const [supplierAddress, setSupplierAddress] = useState('mn_addr_preprod1gg6wcy47l6nacuh7n9aeycwsnsqjuvkuc5vxyhyh79z04kctgt5sxd5gaw');
-  const [winningPrice, setWinningPrice] = useState(tender.ceilingBudget ? (tender.ceilingBudget * 0.85).toString() : '');
-  const salt = '4f9a12c8e3d5b7a091e4f6217c80a2b5';
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [winningSupplier, setWinningSupplier] = useState<string>('');
+  const [winningPrice, setWinningPrice] = useState<string>('');
+  const [salt] = useState<string>(generateRandomSalt().slice(0, 16));
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleFillLowest = () => {
+    setWinningSupplier('mn_addr_preview108ezrx3t5syg4g9a3y3ykavl73ftl6nnn0ntctldpegl3f5l7acssug02u');
+    setWinningPrice(String(Math.round(tender.ceilingBudget * 0.72)));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const price = parseFloat(winningPrice);
+    setError(null);
 
-    if (!supplierAddress.trim()) {
+    const priceNum = Number(winningPrice);
+    if (!winningSupplier.trim()) {
       setError('Supplier address is required.');
       return;
     }
 
-    if (isNaN(price) || price <= 0) {
-      setError('Winning price must be greater than zero.');
+    if (!priceNum || priceNum <= 0) {
+      setError('Winning price must be strictly positive.');
       return;
     }
 
-    if (price > tender.ceilingBudget) {
-      setError(`Award price cannot exceed the budget ceiling of ${formatCurrency(tender.ceilingBudget)}.`);
+    if (priceNum > tender.ceilingBudget) {
+      setError(`Winning bid exceeds tender ceiling budget of ${formatCurrency(tender.ceilingBudget)}.`);
       return;
     }
-
-    setError(null);
-    setIsSubmitting(true);
 
     try {
-      await onAward(tender.id, supplierAddress.trim(), price, salt);
+      setIsSubmitting(true);
+      await onAward(tender.id, winningSupplier.trim(), priceNum, salt);
       onClose();
     } catch (err: any) {
-      setError(err?.message || 'Failed to award contract.');
+      setError(err?.message || 'Award settlement failed.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <div style={{ padding: '0.4rem', background: 'var(--gold-badge)', borderRadius: '6px' }}>
-              <Award size={18} color="var(--gold-glow)" />
+    <AnimatePresence>
+      <div className="neo-modal-backdrop" onClick={onClose}>
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0, y: 25 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.9, opacity: 0, y: 25 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+          className="neo-modal-content"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="neo-modal-header">
+            <div>
+              <span className="neo-badge neo-badge-violet" style={{ marginBottom: '0.4rem' }}>
+                Circuit: awardProcurement()
+              </span>
+              <h2 style={{ fontSize: '1.4rem', marginTop: '0.2rem' }}>
+                Settle & Award Contract
+              </h2>
+              <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+                Tender: {tender.title}
+              </div>
             </div>
-            <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>Award Tender & Settle</h3>
-          </div>
-          <button className="modal-close" onClick={onClose}>
-            <X size={20} />
-          </button>
-        </div>
 
-        <div style={{
-          background: 'var(--bg-input)',
-          padding: '1rem',
-          borderRadius: 'var(--radius-sm)',
-          marginBottom: '1.25rem',
-          border: '1px solid var(--border-subtle)',
-        }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Procurement Target</div>
-          <div style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginTop: '0.15rem' }}>
-            {tender.title}
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.82rem' }}>
-            <span style={{ color: 'var(--text-muted)' }}>Ceiling Budget:</span>
-            <span style={{ fontWeight: 700, color: 'var(--gold-glow)' }}>{formatCurrency(tender.ceilingBudget)}</span>
-          </div>
-        </div>
-
-        <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '1.25rem' }}>
-          Awarding discloses only the winning supplier and contract price to the public ledger. Unsuccessful competitor bids remain sealed forever!
-        </p>
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label" htmlFor="supplierAddress">Awarded Supplier Address</label>
-            <input
-              id="supplierAddress"
-              type="text"
-              className="form-control"
-              value={supplierAddress}
-              onChange={(e) => setSupplierAddress(e.target.value)}
-              required
-              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem' }}
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label" htmlFor="winningPrice">Final Contract Price ($ USD / tNIGHT)</label>
-            <input
-              id="winningPrice"
-              type="number"
-              className="form-control"
-              value={winningPrice}
-              onChange={(e) => setWinningPrice(e.target.value)}
-              required
-              min="1"
-              max={tender.ceilingBudget}
-              step="any"
-            />
-          </div>
-
-          {error && (
-            <div style={{
-              color: 'var(--rose-danger)',
-              fontSize: '0.82rem',
-              marginBottom: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-            }}>
-              <AlertCircle size={15} />
-              {error}
-            </div>
-          )}
-
-          <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
-            <button type="button" className="btn btn-secondary" style={{ flex: 1 }} onClick={onClose} disabled={isSubmitting}>
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-primary" style={{ flex: 2 }} disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <RefreshCw size={16} className="spinning" />
-                  Settling on Midnight...
-                </>
-              ) : (
-                <>
-                  <Award size={16} />
-                  Award Contract
-                </>
-              )}
+            <button className="neo-modal-close" onClick={onClose}>
+              <X size={18} color="#000" />
             </button>
           </div>
-        </form>
+
+          {/* Privacy Invariant Banner */}
+          <div style={{
+            background: 'var(--accent-mint)',
+            border: '2px solid #000',
+            borderRadius: '6px',
+            padding: '0.85rem',
+            marginBottom: '1.25rem',
+            fontSize: '0.82rem',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+              <Lock size={15} color="var(--black)" />
+              Selective Award Disclosure Invariant
+            </div>
+            <p style={{ fontSize: '0.78rem', color: '#1A1A2E', fontWeight: 600 }}>
+              The Midnight smart contract discloses ONLY the winning supplier and winning price. Unsuccessful competing bids remain permanently sealed on-chain forever!
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            <div className="neo-form-group">
+              <label className="neo-form-label">Awarded Winning Supplier Address *</label>
+              <input
+                type="text"
+                className="neo-input"
+                value={winningSupplier}
+                onChange={(e) => setWinningSupplier(e.target.value)}
+                placeholder="mn_addr_..."
+                required
+                autoFocus
+              />
+            </div>
+
+            <div className="neo-form-group">
+              <label className="neo-form-label">
+                Final Winning Price (tNIGHT) * [Max: {formatCurrency(tender.ceilingBudget)}]
+              </label>
+              <input
+                type="number"
+                className="neo-input"
+                value={winningPrice}
+                onChange={(e) => setWinningPrice(e.target.value)}
+                placeholder="Enter verified winning price..."
+                required
+              />
+            </div>
+
+            {/* Quick helper chip */}
+            <div style={{ marginBottom: '1.25rem' }}>
+              <button
+                type="button"
+                className="neo-chip"
+                onClick={handleFillLowest}
+              >
+                Auto-Select Verified Lowest Bid (72% Ceiling)
+              </button>
+            </div>
+
+            {error && (
+              <div style={{
+                padding: '0.75rem',
+                background: 'var(--accent-coral)',
+                border: '2px solid #000',
+                borderRadius: '4px',
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                color: '#000',
+                marginBottom: '1rem',
+              }}>
+                <AlertCircle size={16} />
+                {error}
+              </div>
+            )}
+
+            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
+              <button
+                type="button"
+                className="neo-btn"
+                style={{ flex: 1 }}
+                onClick={onClose}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="neo-btn neo-btn-violet"
+                style={{ flex: 2 }}
+                disabled={isSubmitting || !winningSupplier || !winningPrice}
+              >
+                <Award size={16} />
+                {isSubmitting ? 'Verifying & Awarding...' : 'Disclose Winner & Settle'}
+              </button>
+            </div>
+          </form>
+        </motion.div>
       </div>
-    </div>
+    </AnimatePresence>
   );
 };

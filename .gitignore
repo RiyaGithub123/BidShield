@@ -18,6 +18,10 @@ managed/zkir/
 .midnight-wallet-state/
 *.seed
 *.key
+DEPLOYMENT_WALLETS.json
+contract/DEPLOYMENT_WALLETS.json
+WALLETS_RECOVERY_PRIVATE.md
+.midnight-accounts.json
 
 # Personal challenge progress (not for public repo)
 CHALLENGE_PROGRESS.md

@@ -1,130 +1,157 @@
 import React from 'react';
-import { Github, Twitter, ExternalLink, FileCode } from 'lucide-react';
+import { Github, Twitter, ExternalLink, MessageSquare } from 'lucide-react';
+import type { MidnightNetwork } from '../types/index.js';
+import { NETWORK_CONFIGS } from '../contracts/contractService.js';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  network: MidnightNetwork;
+}
+
+export const Footer: React.FC<FooterProps> = ({ network }) => {
+  const config = NETWORK_CONFIGS[network];
+
   return (
     <footer style={{
-      borderTop: '1px solid var(--border-subtle)',
-      background: 'rgba(10, 15, 26, 0.95)',
+      background: 'var(--bg-canvas)',
+      borderTop: 'var(--border-thick)',
       padding: '3rem 0 2rem 0',
       marginTop: '5rem',
-      position: 'relative',
     }}>
       <div className="container">
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
           gap: '2.5rem',
           marginBottom: '2.5rem',
         }}>
-          {/* Brand Col */}
+          {/* Brand Info */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.85rem' }}>
-              <img src="/bidshield_logo.jpg" alt="BidShield Logo" style={{ width: 32, height: 32, borderRadius: 6 }} />
-              <span style={{ fontSize: '1.25rem', fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}>
+              <img src="/images/bidshield_logo.jpg" alt="BidShield Logo" style={{ width: 34, height: 34, border: '2px solid #000', borderRadius: '4px', boxShadow: '2px 2px 0px #000' }} />
+              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: '1.25rem', textTransform: 'uppercase' }}>
                 BidShield
               </span>
             </div>
-            <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: '320px' }}>
-              Privacy-preserving sealed-bid procurement & reverse auctions. Zero-knowledge verifiable commitments on Midnight Network.
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '1rem' }}>
+              Confidential Sealed-Bid Procurement & Reverse Auctions built on Midnight Network with Compact Zero-Knowledge Circuits.
             </p>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <a
+                href="https://github.com/RiyaGithub123/BidShield"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="neo-btn neo-btn-sm"
+                title="GitHub Repository"
+              >
+                <Github size={14} />
+                GitHub
+              </a>
+              <a
+                href="https://x.com/BidShieldApp"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="neo-btn neo-btn-sm"
+                style={{ background: '#1DA1F2', color: '#fff' }}
+                title="Official X (Twitter) Profile"
+              >
+                <Twitter size={14} />
+                @BidShieldApp
+              </a>
+            </div>
           </div>
 
-          {/* Protocols & Network */}
+          {/* Midnight Ecosystem Links */}
           <div>
-            <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-              Midnight Network
-            </h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.85rem' }}>
+            <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.9rem', marginBottom: '0.85rem' }}>
+              Midnight Ecosystem
+            </div>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem' }}>
               <li>
-                <a
-                  href="https://midnight.network"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: 'var(--text-muted)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
-                >
+                <a href="https://midnight.network" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--black)', textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                   Official Midnight Network <ExternalLink size={12} />
                 </a>
               </li>
               <li>
-                <a
-                  href="https://indexer.preprod.midnight.network/api/v4/graphql"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: 'var(--text-muted)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
-                >
-                  Preprod GraphQL Indexer <ExternalLink size={12} />
+                <a href="https://docs.midnight.network" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--black)', textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  Compact Docs & Circuits <ExternalLink size={12} />
                 </a>
               </li>
               <li>
-                <a
-                  href="https://midnight-tmnight-preprod.nethermind.dev"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: 'var(--text-muted)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
-                >
-                  Preprod tNIGHT Faucet <ExternalLink size={12} />
+                <a href={config.faucetUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--black)', textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  {network.toUpperCase()} Testnet Faucet <ExternalLink size={12} />
+                </a>
+              </li>
+              <li>
+                <a href="https://1am.xyz" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--black)', textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  1AM Non-Custodial Wallet <ExternalLink size={12} />
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Open Source & Community */}
+          {/* User Feedback & Community */}
           <div>
-            <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-              Project Links
-            </h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.85rem' }}>
-              <li>
-                <a
-                  href="https://github.com/RiyaGithub123/BidShield"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: 'var(--cyan-primary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 600 }}
-                >
-                  <Github size={15} />
-                  GitHub Repository
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://x.com/BidShieldApp"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: 'var(--text-muted)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.45rem' }}
-                >
-                  <Twitter size={15} />
-                  Product X (@BidShieldApp)
-                </a>
-              </li>
-              <li>
-                <span style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                  <FileCode size={15} />
-                  Compact Compiler v0.5.2
+            <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.9rem', marginBottom: '0.85rem' }}>
+              Validation & Feedback
+            </div>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+              Help shape confidential procurement on Midnight. Share feedback on wallet connection and proving UX:
+            </p>
+            <a
+              href="https://forms.gle/bidshield-feedback"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="neo-btn neo-btn-mint neo-btn-sm"
+              style={{ display: 'inline-flex', width: 'auto' }}
+            >
+              <MessageSquare size={14} />
+              Open Feedback Form
+            </a>
+          </div>
+
+          {/* Network Specs */}
+          <div>
+            <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.9rem', marginBottom: '0.85rem' }}>
+              Network Specs
+            </div>
+            <div style={{
+              background: 'var(--bg-secondary)',
+              border: '2px solid #000',
+              borderRadius: '6px',
+              padding: '0.75rem',
+              fontSize: '0.75rem',
+              fontFamily: 'var(--font-mono)',
+            }}>
+              <div>Target: <strong>{network.toUpperCase()}</strong></div>
+              <div style={{ marginTop: '0.25rem', wordBreak: 'break-all' }}>
+                Contract: {config.contractAddress}
+              </div>
+              <div style={{ marginTop: '0.4rem' }}>
+                <span className="neo-badge neo-badge-yellow" style={{ fontSize: '0.65rem' }}>
+                  ZK-Proof Verified
                 </span>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {/* Bottom Copyright Strip */}
         <div style={{
+          borderTop: '2px solid #000',
           paddingTop: '1.5rem',
-          borderTop: '1px solid var(--border-subtle)',
           display: 'flex',
-          justifyContent: 'space-between',
           alignItems: 'center',
+          justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '1rem',
-          fontSize: '0.78rem',
-          color: 'var(--text-muted)',
+          gap: '0.75rem',
+          fontSize: '0.8rem',
+          color: 'var(--text-secondary)',
         }}>
           <div>
-            © 2026 BidShield. Built for the Midnight Builder Challenge. MIT / Apache-2.0 License.
+            © 2026 BidShield Protocol. Open-source Apache 2.0. Built on Midnight Network.
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span className="status-dot" style={{ width: 6, height: 6 }} />
-            <span>Preprod Testnet Operational</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 700 }}>
+            <span>Powered by Midnight Compact & Zero-Knowledge Circuits</span>
           </div>
         </div>
       </div>

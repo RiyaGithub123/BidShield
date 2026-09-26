@@ -1,141 +1,224 @@
 import React, { useState } from 'react';
-import { Wallet, ChevronDown, Sparkles, LogOut } from 'lucide-react';
-import type { WalletAccount } from '../types/index.js';
+import { Sparkles, Globe, LogOut, ChevronDown, Check } from 'lucide-react';
+import type { WalletAccount, MidnightNetwork } from '../types/index.js';
 import { formatAddress } from '../utils/crypto.js';
 
 interface FloatingNavbarProps {
   wallet: WalletAccount;
+  network: MidnightNetwork;
   onConnectClick: () => void;
   onDisconnectClick: () => void;
   onCreateRfpClick: () => void;
+  onSwitchNetwork: (network: MidnightNetwork) => void;
   activeFilter: string;
   setActiveFilter: (filter: string) => void;
 }
 
 export const FloatingNavbar: React.FC<FloatingNavbarProps> = ({
   wallet,
+  network,
   onConnectClick,
   onDisconnectClick,
   onCreateRfpClick,
+  onSwitchNetwork,
   activeFilter,
   setActiveFilter,
 }) => {
   const [showWalletMenu, setShowWalletMenu] = useState(false);
+  const [showNetworkMenu, setShowNetworkMenu] = useState(false);
 
   return (
-    <div className="floating-navbar-wrapper">
-      <header className="floating-navbar">
-        {/* Brand */}
-        <div className="brand-badge">
-          <img src="/bidshield_logo.jpg" alt="BidShield Logo" className="brand-emblem" />
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ fontSize: '1.15rem', fontWeight: 800, fontFamily: 'var(--font-display)', color: '#fff' }}>
-              BidShield
-            </span>
-            <span style={{ fontSize: '0.65rem', color: 'var(--accent-cyan)', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 600 }}>
-              Midnight Network
-            </span>
+    <header className="neo-navbar">
+      <div className="container neo-navbar-inner">
+        {/* Brand & Logo */}
+        <div className="neo-brand" onClick={() => setActiveFilter('ALL')}>
+          <img src="/images/bidshield_logo.jpg" alt="BidShield Logo" className="neo-brand-logo" />
+          <div>
+            <div className="neo-brand-name">BidShield</div>
+            <div className="neo-brand-tagline">Midnight Zero-Knowledge</div>
           </div>
         </div>
 
-        {/* Center Segmented Filter Control */}
-        <div className="segmented-control desktop-only">
+        {/* Center Segmented Filter (Desktop) */}
+        <div className="neo-segmented-group desktop-only">
           <button
-            className={`segmented-button ${activeFilter === 'ALL' ? 'active' : ''}`}
+            className={`neo-segmented-item ${activeFilter === 'ALL' ? 'active' : ''}`}
             onClick={() => setActiveFilter('ALL')}
           >
             All Tenders
           </button>
           <button
-            className={`segmented-button ${activeFilter === 'BIDDING_OPEN' ? 'active' : ''}`}
+            className={`neo-segmented-item ${activeFilter === 'BIDDING_OPEN' ? 'active' : ''}`}
             onClick={() => setActiveFilter('BIDDING_OPEN')}
           >
             Active Bidding
           </button>
           <button
-            className={`segmented-button ${activeFilter === 'AWARDED' ? 'active' : ''}`}
+            className={`neo-segmented-item ${activeFilter === 'AWARDED' ? 'active' : ''}`}
             onClick={() => setActiveFilter('AWARDED')}
           >
-            Awarded Contracts
+            Awarded
           </button>
         </div>
 
-        {/* Right Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        {/* Right Actions: Network Switcher + Publish RFP + Wallet Connect */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+          {/* Network Switcher Dropdown */}
+          <div style={{ position: 'relative' }}>
+            <button
+              className="neo-network-switch"
+              onClick={() => {
+                setShowNetworkMenu(!showNetworkMenu);
+                setShowWalletMenu(false);
+              }}
+              title="Switch Midnight Network"
+            >
+              <Globe size={15} color="var(--black)" />
+              <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                {network}
+              </span>
+              <span className="pulse-dot" style={{ backgroundColor: network === 'preview' ? 'var(--accent-mint)' : 'var(--accent-sky)' }} />
+              <ChevronDown size={14} />
+            </button>
+
+            {showNetworkMenu && (
+              <div
+                className="neo-card"
+                style={{
+                  position: 'absolute',
+                  top: '115%',
+                  right: 0,
+                  width: '210px',
+                  padding: '0.5rem',
+                  zIndex: 150,
+                  boxShadow: 'var(--shadow-md)',
+                }}
+              >
+                <div style={{ padding: '0.4rem 0.6rem', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+                  Select Network
+                </div>
+                <button
+                  className="neo-btn neo-btn-sm"
+                  style={{
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    marginBottom: '0.35rem',
+                    background: network === 'preview' ? 'var(--accent-yellow)' : '#fff',
+                  }}
+                  onClick={() => {
+                    onSwitchNetwork('preview');
+                    setShowNetworkMenu(false);
+                  }}
+                >
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <span className="pulse-dot" style={{ backgroundColor: 'var(--accent-mint)' }} />
+                    Preview Testnet
+                  </span>
+                  {network === 'preview' && <Check size={14} />}
+                </button>
+
+                <button
+                  className="neo-btn neo-btn-sm"
+                  style={{
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    background: network === 'preprod' ? 'var(--accent-yellow)' : '#fff',
+                  }}
+                  onClick={() => {
+                    onSwitchNetwork('preprod');
+                    setShowNetworkMenu(false);
+                  }}
+                >
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <span className="pulse-dot" style={{ backgroundColor: 'var(--accent-sky)' }} />
+                    Preprod Testnet
+                  </span>
+                  {network === 'preprod' && <Check size={14} />}
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Publish RFP CTA (Desktop) */}
           <button
-            className="btn-modern-primary desktop-only"
-            style={{ padding: '0.5rem 1.1rem', fontSize: '0.84rem' }}
+            className="neo-btn neo-btn-primary desktop-only"
             onClick={onCreateRfpClick}
+            style={{ padding: '0.6rem 1.1rem' }}
           >
-            <Sparkles size={15} />
+            <Sparkles size={16} />
             Publish RFP
           </button>
 
+          {/* Wallet Connect / Disconnect */}
           {wallet.isConnected ? (
             <div style={{ position: 'relative' }}>
               <button
-                className="btn-modern-glass"
-                style={{ padding: '0.5rem 1rem', fontSize: '0.84rem', borderColor: 'var(--border-glow)' }}
-                onClick={() => setShowWalletMenu(!showWalletMenu)}
+                className="neo-btn neo-btn-mint"
+                style={{ padding: '0.6rem 1rem' }}
+                onClick={() => {
+                  setShowWalletMenu(!showWalletMenu);
+                  setShowNetworkMenu(false);
+                }}
               >
-                <span className="status-dot-pulse" style={{ width: 6, height: 6 }} />
-                <span>{formatAddress(wallet.address)}</span>
-                <ChevronDown size={14} color="var(--text-muted)" />
+                <span className="pulse-dot" />
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.84rem' }}>
+                  {formatAddress(wallet.address)}
+                </span>
+                <ChevronDown size={14} />
               </button>
 
               {showWalletMenu && (
                 <div
+                  className="neo-card"
                   style={{
                     position: 'absolute',
-                    top: 'calc(100% + 10px)',
+                    top: '115%',
                     right: 0,
                     width: '240px',
-                    padding: '1.25rem',
-                    background: '#0e1424',
-                    border: '1px solid var(--border-medium)',
-                    borderRadius: 'var(--radius-md)',
-                    boxShadow: '0 20px 50px rgba(0,0,0,0.8)',
-                    zIndex: 1000,
+                    padding: '1rem',
+                    zIndex: 150,
+                    boxShadow: 'var(--shadow-md)',
                   }}
                 >
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                  <div style={{ fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-muted)' }}>
                     Connected Provider
                   </div>
-                  <div style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--accent-cyan)', margin: '0.2rem 0 0.75rem 0' }}>
-                    {wallet.walletName || 'Midnight 1AM Wallet'}
+                  <div style={{ fontWeight: 800, fontSize: '0.92rem', marginTop: '0.2rem' }}>
+                    {wallet.walletName || 'Midnight Wallet'}
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                    Unshielded Balance
+
+                  <div style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'var(--bg-secondary)', border: '1.5px solid #000', borderRadius: '4px' }}>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Full Address:</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', wordBreak: 'break-all', marginTop: '0.15rem' }}>
+                      {wallet.address}
+                    </div>
                   </div>
-                  <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--accent-gold)', marginBottom: '1rem' }}>
-                    {wallet.balance.toLocaleString()} tNIGHT
-                  </div>
+
                   <button
-                    className="btn-modern-glass"
-                    style={{ width: '100%', padding: '0.5rem', fontSize: '0.8rem', color: 'var(--accent-rose)' }}
+                    className="neo-btn neo-btn-coral neo-btn-sm"
+                    style={{ width: '100%', marginTop: '0.85rem' }}
                     onClick={() => {
                       onDisconnectClick();
                       setShowWalletMenu(false);
                     }}
                   >
                     <LogOut size={14} />
-                    Disconnect
+                    Disconnect Wallet
                   </button>
                 </div>
               )}
             </div>
           ) : (
             <button
-              className="btn-modern-cyan"
-              style={{ padding: '0.5rem 1.15rem', fontSize: '0.84rem' }}
+              className="neo-btn neo-btn-mint"
+              style={{ padding: '0.6rem 1.2rem' }}
               onClick={onConnectClick}
             >
-              <Wallet size={15} />
               Connect Wallet
             </button>
           )}
         </div>
-      </header>
-    </div>
+      </div>
+    </header>
   );
 };

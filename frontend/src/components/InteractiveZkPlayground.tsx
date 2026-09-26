@@ -1,174 +1,217 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, RefreshCw, Cpu, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
-import { sha256Hex, generateRandomSalt, formatCurrency } from '../utils/crypto.js';
+import { Cpu, ShieldCheck, ArrowDown, Lock, CheckCircle2, RefreshCw } from 'lucide-react';
+import { sha256Hex, generateRandomSalt } from '../utils/crypto.js';
 
 export const InteractiveZkPlayground: React.FC = () => {
-  const [simulatedBid, setSimulatedBid] = useState<number>(385000);
-  const [simulatedSalt, setSimulatedSalt] = useState<string>(generateRandomSalt().slice(0, 16));
-  const [computedCommitment, setComputedCommitment] = useState<string>('');
-  const [proofState, setProofState] = useState<'idle' | 'proving' | 'verified'>('verified');
+  // Input starts clean and empty by default (NO hardcoded mock values)
+  const [privateBidInput, setPrivateBidInput] = useState<string>('');
+  const [salt, setSalt] = useState<string>('');
+  const [commitment, setCommitment] = useState<string>('');
+  const [isProving, setIsProving] = useState<boolean>(false);
+  const [proofVerified, setProofVerified] = useState<boolean>(false);
 
+  // Compute commitment dynamically when user enters bid
   useEffect(() => {
-    sha256Hex(`TENDER_SIM:${simulatedBid}:${simulatedSalt}:BIDDER_ALPHA`).then((hash) => {
-      setComputedCommitment(`0x${hash}`);
+    if (!privateBidInput) {
+      setCommitment('');
+      setProofVerified(false);
+      return;
+    }
+
+    const currentSalt = salt || generateRandomSalt().slice(0, 16);
+    if (!salt) setSalt(currentSalt);
+
+    sha256Hex(`BIDSHIELD_PLAYGROUND:${privateBidInput}:${currentSalt}:DEMO_SUPPLIER`).then((hash) => {
+      setCommitment(`0x${hash}`);
+      setProofVerified(true);
     });
-  }, [simulatedBid, simulatedSalt]);
+  }, [privateBidInput, salt]);
 
   const handleSimulateProof = () => {
-    setProofState('proving');
+    if (!privateBidInput) return;
+    setIsProving(true);
+    setProofVerified(false);
 
     setTimeout(() => {
-      setProofState('verified');
-    }, 600);
+      setIsProving(false);
+      setProofVerified(true);
+    }, 450);
+  };
+
+  const handleRegenerateSalt = () => {
+    setSalt(generateRandomSalt().slice(0, 16));
   };
 
   return (
-    <div className="bento-card span-7" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+    <div className="neo-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
       <div>
-        {/* Card Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-            <div style={{
-              width: 38,
-              height: 38,
-              borderRadius: '10px',
-              background: 'rgba(245, 158, 11, 0.15)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              <Cpu size={20} color="var(--accent-gold)" />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '1.15rem', color: '#fff' }}>Interactive ZK Circuit Simulator</h3>
-              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                Compact Witness Engine • Live Client-Side Proving
-              </div>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', marginBottom: '1.25rem', borderBottom: '2px solid #000', paddingBottom: '0.85rem' }}>
+          <div>
+            <span className="neo-badge neo-badge-yellow" style={{ marginBottom: '0.35rem' }}>
+              Interactive Zero-Knowledge Engine
+            </span>
+            <h2 style={{ fontSize: '1.4rem', marginTop: '0.2rem' }}>
+              ZK Prover-to-Verifier Pipeline
+            </h2>
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginTop: '0.15rem' }}>
+              Unidirectional flow: Private Witness ➔ ZK-SNARK ➔ Public Ledger
             </div>
           </div>
-          <span className="badge-pill badge-pill-gold">
-            <Sparkles size={12} />
-            Live Circuit
+
+          <span className="neo-badge neo-badge-mint desktop-only">
+            Compact 0.5.2
           </span>
         </div>
 
-        <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '1.25rem' }}>
-          Drag the slider to adjust your confidential bid price. Observe how Midnight executes the private witness locally, producing a fixed 32-byte cryptographic commitment without leaking your private bid price to observers.
-        </p>
-
-        {/* Interactive Bid Slider */}
-        <div className="slider-container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
-              Private Bid Witness (<code style={{ color: 'var(--accent-cyan)' }}>getBidAmount()</code>)
-            </span>
-            <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--accent-gold)', fontFamily: 'var(--font-mono)' }}>
-              {formatCurrency(simulatedBid)}
-            </span>
-          </div>
-
-          <input
-            type="range"
-            className="custom-range"
-            min="100000"
-            max="1000000"
-            step="5000"
-            value={simulatedBid}
-            onChange={(e) => {
-              setSimulatedBid(parseInt(e.target.value, 10));
-              handleSimulateProof();
-            }}
-          />
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-            <span>$100,000 (Floor)</span>
-            <span>$500,000 (RFP Ceiling)</span>
-            <span>$1,000,000 (Max)</span>
-          </div>
-        </div>
-
-        {/* Live Privacy Disclose Boundary Box */}
+        {/* STEP 1: CLIENT-SIDE PRIVATE PROVER (TOP) */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '1rem',
-          marginTop: '1.25rem',
+          background: 'var(--accent-yellow)',
+          border: '3px solid #000',
+          borderRadius: '6px',
+          boxShadow: '4px 4px 0px #000',
+          padding: '1.25rem',
+          marginBottom: '1.25rem',
         }}>
-          {/* Private Wallet Domain */}
-          <div style={{
-            background: 'rgba(8, 12, 22, 0.8)',
-            padding: '1rem',
-            borderRadius: 'var(--radius-sm)',
-            border: '1px solid rgba(244, 63, 94, 0.25)',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.5rem' }}>
-              <EyeOff size={15} color="var(--accent-rose)" />
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-rose)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Supplier Private State
-              </span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 900, textTransform: 'uppercase', fontSize: '0.88rem' }}>
+              <Lock size={16} />
+              Step 1: Client Private Witness (Local Memory)
             </div>
-            <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-              Bid Amount: <strong style={{ color: '#fff' }}>{formatCurrency(simulatedBid)}</strong>
-            </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem', fontFamily: 'var(--font-mono)' }}>
-              Salt: {simulatedSalt}
-            </div>
-            <div style={{ fontSize: '0.7rem', color: 'var(--accent-rose)', marginTop: '0.4rem' }}>
-              🔒 Never touches blockchain
-            </div>
+            <span className="neo-badge neo-badge-dark" style={{ fontSize: '0.68rem' }}>
+              Never Sent to Server
+            </span>
           </div>
 
-          {/* Public Ledger Domain */}
-          <div style={{
-            background: 'rgba(8, 12, 22, 0.8)',
-            padding: '1rem',
-            borderRadius: 'var(--radius-sm)',
-            border: '1px solid rgba(56, 189, 248, 0.25)',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.5rem' }}>
-              <Eye size={15} color="var(--accent-cyan)" />
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-cyan)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Public Midnight Ledger
-              </span>
+          <p style={{ fontSize: '0.82rem', color: '#1A1A2E', marginBottom: '0.85rem', fontWeight: 600 }}>
+            Enter your secret commercial bid price. It remains stored in client-side memory only.
+          </p>
+
+          <div style={{ display: 'flex', gap: '0.65rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1 1 200px' }}>
+              <input
+                type="number"
+                className="neo-input"
+                value={privateBidInput}
+                onChange={(e) => setPrivateBidInput(e.target.value)}
+                placeholder="Enter confidential bid (e.g. 240000)..."
+                style={{ background: '#FFFFFF', fontWeight: 700 }}
+              />
             </div>
-            <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-              Status: <strong style={{ color: 'var(--accent-emerald)' }}>Valid ZK Commitment</strong>
-            </div>
-            <div style={{
-              fontSize: '0.68rem',
-              color: 'var(--accent-cyan)',
-              fontFamily: 'var(--font-mono)',
-              marginTop: '0.25rem',
-              wordBreak: 'break-all',
-              lineHeight: 1.3,
-            }}>
-              {computedCommitment.slice(0, 22)}...
-            </div>
-            <div style={{ fontSize: '0.7rem', color: 'var(--accent-emerald)', marginTop: '0.4rem' }}>
-              ✓ Verifiable on Preprod
-            </div>
+
+            <button
+              className="neo-btn neo-btn-dark neo-btn-sm"
+              onClick={handleSimulateProof}
+              disabled={!privateBidInput || isProving}
+            >
+              <Cpu size={14} />
+              {isProving ? 'Proving ZK...' : 'Generate ZK Proof'}
+            </button>
+          </div>
+
+          {/* Quick-fill helper chips */}
+          <div className="neo-input-helpers">
+            <span style={{ fontSize: '0.72rem', fontWeight: 700, alignSelf: 'center', marginRight: '0.2rem' }}>
+              Test presets:
+            </span>
+            <button className="neo-chip" onClick={() => setPrivateBidInput('185000')}>
+              $185,000
+            </button>
+            <button className="neo-chip" onClick={() => setPrivateBidInput('320000')}>
+              $320,000
+            </button>
+            <button className="neo-chip" onClick={() => setPrivateBidInput('450000')}>
+              $450,000
+            </button>
+            {privateBidInput && (
+              <button className="neo-chip" style={{ background: '#FF5376', color: '#fff' }} onClick={() => setPrivateBidInput('')}>
+                Clear
+              </button>
+            )}
           </div>
         </div>
-      </div>
 
-      {/* Action Footer */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)' }}>
-        <button
-          className="btn-modern-glass"
-          style={{ fontSize: '0.8rem', padding: '0.5rem 1rem' }}
-          onClick={() => setSimulatedSalt(generateRandomSalt().slice(0, 16))}
-        >
-          <RefreshCw size={13} />
-          Roll Salt Entropy
-        </button>
+        {/* STEP 2: ZK PROVING PIPELINE ARROW (MIDDLE) */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', margin: '0.75rem 0' }}>
+          <div style={{ height: '2px', flex: 1, background: '#000' }} />
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+            padding: '0.35rem 0.85rem',
+            background: 'var(--accent-violet)',
+            color: '#fff',
+            border: '2px solid #000',
+            boxShadow: '2px 2px 0px #000',
+            borderRadius: '4px',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.75rem',
+            fontWeight: 800,
+            textTransform: 'uppercase',
+          }}>
+            <ArrowDown size={14} />
+            Compact Circuit: submitSealedBid()
+          </div>
+          <div style={{ height: '2px', flex: 1, background: '#000' }} />
+        </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          {proofState === 'proving' ? (
-            <span style={{ fontSize: '0.82rem', color: 'var(--accent-cyan)' }}>Computing SNARK Proof...</span>
-          ) : (
-            <span style={{ fontSize: '0.82rem', color: 'var(--accent-emerald)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <CheckCircle2 size={15} /> Circuit Satisfied
-            </span>
+        {/* STEP 3: PUBLIC ON-CHAIN LEDGER AUDIT (BOTTOM) */}
+        <div style={{
+          background: 'var(--bg-secondary)',
+          border: '3px solid #000',
+          borderRadius: '6px',
+          boxShadow: '4px 4px 0px #000',
+          padding: '1.25rem',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 900, textTransform: 'uppercase', fontSize: '0.88rem' }}>
+              <ShieldCheck size={16} />
+              Step 2: Public Ledger State (Visible On-Chain)
+            </div>
+
+            {proofVerified ? (
+              <span className="neo-badge neo-badge-mint">
+                <CheckCircle2 size={12} />
+                Proof Valid
+              </span>
+            ) : (
+              <span className="neo-badge neo-badge-coral">
+                Awaiting Bid Input
+              </span>
+            )}
+          </div>
+
+          <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '0.85rem' }}>
+            Observers see ONLY this 32-byte cryptographic commitment hash. The price is mathematically hidden!
+          </p>
+
+          <div style={{
+            background: '#FFFFFF',
+            border: '2px solid #000',
+            borderRadius: '4px',
+            padding: '0.65rem 0.85rem',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.78rem',
+            wordBreak: 'break-all',
+            color: commitment ? 'var(--black)' : 'var(--text-muted)',
+          }}>
+            {commitment || '0x (Waiting for confidential bid entry...)'}
+          </div>
+
+          {commitment && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <div style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>
+                Salt Entropy: {salt}
+              </div>
+              <button
+                className="neo-chip"
+                onClick={handleRegenerateSalt}
+                title="Regenerate random salt entropy"
+              >
+                <RefreshCw size={11} style={{ marginRight: '3px' }} />
+                New Salt
+              </button>
+            </div>
           )}
         </div>
       </div>

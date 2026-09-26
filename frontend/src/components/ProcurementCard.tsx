@@ -1,7 +1,8 @@
 import React from 'react';
-import { Lock, Clock, Building2, ShieldAlert, Award, CheckCircle2, EyeOff } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Clock, ShieldCheck, CheckCircle2, Lock, Award } from 'lucide-react';
 import type { ProcurementTender } from '../types/index.js';
-import { formatCurrency, getTimeRemaining, formatAddress } from '../utils/crypto.js';
+import { getTimeRemaining, formatCurrency } from '../utils/crypto.js';
 
 interface ProcurementCardProps {
   tender: ProcurementTender;
@@ -16,172 +17,180 @@ export const ProcurementCard: React.FC<ProcurementCardProps> = ({
   onVerifyComplianceClick,
   onAwardClick,
 }) => {
-  const { text: timeText, isExpired } = getTimeRemaining(tender.submissionDeadline);
-
-  const getStatusBadge = () => {
-    switch (tender.status) {
-      case 'BIDDING_OPEN':
-        return (
-          <span className="badge-pill badge-pill-cyan">
-            <span className="status-dot-pulse" style={{ width: 6, height: 6 }} />
-            Bidding Open
-          </span>
-        );
-      case 'BIDDING_CLOSED':
-        return <span className="badge-pill badge-pill-gold">Bidding Closed</span>;
-      case 'AWARDED':
-        return (
-          <span className="badge-pill badge-pill-emerald">
-            <CheckCircle2 size={12} />
-            Contract Awarded
-          </span>
-        );
-    }
-  };
+  const isExpired = Date.now() > tender.submissionDeadline;
+  const isAwarded = tender.status === 'AWARDED';
+  const isClosed = tender.status === 'BIDDING_CLOSED' || (isExpired && !isAwarded);
 
   return (
-    <div className="bento-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      {/* Top Meta */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', gap: '0.75rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', fontSize: '0.82rem' }}>
-          <Building2 size={15} color="var(--accent-cyan)" />
-          <span style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>{tender.organization}</span>
-        </div>
-        {getStatusBadge()}
-      </div>
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.2 }}
+      className="neo-card"
+      style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}
+    >
+      <div>
+        {/* Top Header: Organization & Status Badge */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.85rem' }}>
+          <span style={{ fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>
+            {tender.organization}
+          </span>
 
-      {/* RFP Title */}
-      <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem', lineHeight: 1.35, color: '#fff' }}>
-        {tender.title}
-      </h3>
+          {tender.status === 'BIDDING_OPEN' && !isExpired && (
+            <span className="neo-badge neo-badge-yellow">
+              <span className="pulse-dot" />
+              Bidding Open
+            </span>
+          )}
 
-      {/* Description */}
-      <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '1.25rem', flexGrow: 1, lineHeight: 1.55 }}>
-        {tender.description}
-      </p>
+          {isClosed && !isAwarded && (
+            <span className="neo-badge neo-badge-coral">
+              <Clock size={12} />
+              Intake Closed
+            </span>
+          )}
 
-      {/* Specs Grid */}
-      <div style={{
-        background: 'rgba(8, 12, 22, 0.85)',
-        borderRadius: 'var(--radius-sm)',
-        padding: '1rem',
-        marginBottom: '1.25rem',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '0.75rem',
-        border: '1px solid var(--border-subtle)',
-      }}>
-        <div>
-          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-            Budget Ceiling
-          </div>
-          <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--accent-gold)', fontFamily: 'var(--font-mono)' }}>
-            {formatCurrency(tender.ceilingBudget)}
-          </div>
+          {isAwarded && (
+            <span className="neo-badge neo-badge-mint">
+              <Award size={12} />
+              Awarded
+            </span>
+          )}
         </div>
 
-        <div>
-          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-            Sealed Bids
-          </div>
-          <div style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-            <EyeOff size={14} />
-            {tender.totalBidsSubmitted} Received
-          </div>
-        </div>
+        {/* Title */}
+        <h3 style={{ marginBottom: '0.75rem', lineHeight: 1.25 }}>
+          {tender.title}
+        </h3>
 
-        <div style={{ gridColumn: 'span 2', paddingTop: '0.5rem', borderTop: '1px solid var(--border-subtle)' }}>
-          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-            <Clock size={12} />
-            Submission Window
-          </div>
-          <div style={{ fontSize: '0.88rem', fontWeight: 600, color: isExpired ? 'var(--accent-rose)' : '#fff', marginTop: '0.15rem' }}>
-            {timeText}
-          </div>
-        </div>
-      </div>
+        {/* Description */}
+        <p style={{ fontSize: '0.88rem', marginBottom: '1.25rem', color: 'var(--text-secondary)' }}>
+          {tender.description}
+        </p>
 
-      {/* Compliance Standard */}
-      <div style={{
-        fontSize: '0.78rem',
-        color: 'var(--text-muted)',
-        marginBottom: '1.25rem',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.45rem',
-      }}>
-        <ShieldAlert size={14} color="var(--accent-cyan)" />
-        <span>RFP Standard: <strong style={{ color: 'var(--text-secondary)' }}>{tender.complianceStandard}</strong></span>
-      </div>
-
-      {/* Award Outcome if Awarded */}
-      {tender.status === 'AWARDED' && (
+        {/* Metrics Grid */}
         <div style={{
-          background: 'rgba(16, 185, 129, 0.1)',
-          border: '1px solid rgba(16, 185, 129, 0.3)',
-          borderRadius: 'var(--radius-sm)',
-          padding: '0.85rem 1rem',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '0.65rem',
+          padding: '0.85rem',
+          background: 'var(--bg-secondary)',
+          border: '2px solid #000',
+          borderRadius: '6px',
+          marginBottom: '1rem',
+        }}>
+          <div>
+            <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', fontWeight: 800, color: 'var(--text-muted)' }}>
+              Ceiling Budget
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 800, fontSize: '1.05rem', color: 'var(--black)' }}>
+              {formatCurrency(tender.ceilingBudget)}
+            </div>
+          </div>
+
+          <div>
+            <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', fontWeight: 800, color: 'var(--text-muted)' }}>
+              Sealed Bids
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 800, fontSize: '1.05rem', color: 'var(--accent-violet)' }}>
+              {tender.totalBidsSubmitted} Received
+            </div>
+          </div>
+        </div>
+
+        {/* Accreditation Gate */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.4rem',
+          fontSize: '0.75rem',
+          fontWeight: 700,
+          color: 'var(--black)',
           marginBottom: '1.25rem',
         }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--accent-emerald)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
-            🏆 Awarded Winning Bid
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.85rem', color: '#fff', fontFamily: 'var(--font-mono)' }}>
-              {formatAddress(tender.winningBidderId)}
-            </span>
-            <span style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--accent-emerald)' }}>
-              {tender.winningAmount ? formatCurrency(tender.winningAmount) : 'Settled'}
-            </span>
-          </div>
+          <ShieldCheck size={15} color="var(--black)" />
+          <span>{tender.complianceStandard}</span>
         </div>
-      )}
 
-      {/* Action Buttons */}
-      <div style={{ display: 'flex', gap: '0.65rem', marginTop: 'auto' }}>
-        {tender.status === 'BIDDING_OPEN' && (
-          <>
-            <button
-              className="btn-modern-primary"
-              style={{ flex: 1, padding: '0.65rem 0.9rem', fontSize: '0.85rem' }}
-              onClick={() => onSubmitBidClick(tender)}
-            >
-              <Lock size={15} />
-              Submit Bid
-            </button>
-            <button
-              className="btn-modern-glass"
-              style={{ padding: '0.65rem 0.9rem', fontSize: '0.85rem' }}
-              onClick={() => onVerifyComplianceClick(tender)}
-              title="Verify Compliance Credential"
-            >
-              Verify ZK
-            </button>
-          </>
-        )}
-
-        {tender.status === 'BIDDING_CLOSED' && (
-          <button
-            className="btn-modern-cyan"
-            style={{ width: '100%', padding: '0.7rem', fontSize: '0.88rem' }}
-            onClick={() => onAwardClick(tender)}
-          >
-            <Award size={16} />
-            Evaluate & Award Winner
-          </button>
-        )}
-
-        {tender.status === 'AWARDED' && (
-          <button
-            className="btn-modern-glass"
-            style={{ width: '100%', padding: '0.7rem', fontSize: '0.88rem', opacity: 0.9 }}
-            disabled
-          >
-            <CheckCircle2 size={16} color="var(--accent-emerald)" />
-            Procurement Settled On-Chain
-          </button>
+        {/* Award Outcome if Awarded */}
+        {isAwarded && tender.winningAmount && (
+          <div style={{
+            padding: '0.75rem',
+            background: 'var(--accent-mint)',
+            border: '2px solid #000',
+            borderRadius: '6px',
+            boxShadow: '2px 2px 0px #000',
+            marginBottom: '1.25rem',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 800, fontSize: '0.78rem', textTransform: 'uppercase' }}>
+              <CheckCircle2 size={15} />
+              Awarded Winning Contract
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 800, fontSize: '1.15rem', marginTop: '0.2rem' }}>
+              {formatCurrency(tender.winningAmount)}
+            </div>
+            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', marginTop: '0.15rem', color: '#1A1A2E' }}>
+              Supplier: {tender.winningBidderId}
+            </div>
+          </div>
         )}
       </div>
-    </div>
+
+      {/* Action Buttons */}
+      <div style={{ borderTop: '2px solid #000', paddingTop: '1rem', marginTop: 'auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', fontFamily: 'var(--font-mono)' }}>
+            <Clock size={13} />
+            <span>{isExpired ? 'Bidding Concluded' : getTimeRemaining(tender.submissionDeadline).text}</span>
+          </div>
+
+          <button
+            className="neo-btn neo-btn-sm"
+            style={{ background: '#fff', fontSize: '0.72rem' }}
+            onClick={() => onVerifyComplianceClick(tender)}
+            title="Prove compliance credentials via ZK proof"
+          >
+            <ShieldCheck size={13} />
+            Prove ZK
+          </button>
+        </div>
+
+        {tender.status === 'BIDDING_OPEN' && !isExpired && (
+          <button
+            className="neo-btn neo-btn-primary"
+            style={{ width: '100%' }}
+            onClick={() => onSubmitBidClick(tender)}
+          >
+            <Lock size={15} />
+            Submit Sealed Bid
+          </button>
+        )}
+
+        {isClosed && !isAwarded && (
+          <button
+            className="neo-btn neo-btn-violet"
+            style={{ width: '100%' }}
+            onClick={() => onAwardClick(tender)}
+          >
+            <Award size={15} />
+            Evaluate & Award
+          </button>
+        )}
+
+        {isAwarded && (
+          <div style={{
+            textAlign: 'center',
+            fontSize: '0.75rem',
+            fontFamily: 'var(--font-mono)',
+            fontWeight: 700,
+            color: 'var(--text-secondary)',
+            padding: '0.4rem',
+          }}>
+            🔒 Competitor bids remain sealed forever
+          </div>
+        )}
+      </div>
+    </motion.div>
   );
 };

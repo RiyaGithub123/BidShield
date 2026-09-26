@@ -1,3 +1,5 @@
+export type MidnightNetwork = 'preview' | 'preprod';
+
 export type TenderStatus = 'BIDDING_OPEN' | 'BIDDING_CLOSED' | 'AWARDED';
 
 export interface ProcurementTender {
@@ -35,9 +37,10 @@ export interface WalletAccount {
   address: string;
   balance: number;
   dustBalance: number;
-  network: 'preprod' | 'preview' | 'testnet';
+  network: MidnightNetwork;
   isConnected: boolean;
   walletName: string;
+  isDemo?: boolean;
 }
 
 export interface TransactionNotification {
@@ -47,4 +50,15 @@ export interface TransactionNotification {
   message: string;
   txHash?: string;
   timestamp: number;
+}
+
+export interface NetworkConfig {
+  id: MidnightNetwork;
+  name: string;
+  rpcUrl: string;
+  indexerUrl: string;
+  indexerWsUrl: string;
+  faucetUrl: string;
+  explorerUrl: string;
+  contractAddress: string;
 }

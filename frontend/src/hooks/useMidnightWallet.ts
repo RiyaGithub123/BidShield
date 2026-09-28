@@ -203,10 +203,11 @@ export function useMidnightWallet() {
 
       return true;
     } catch (err: any) {
-      console.error('Wallet connection error:', err);
       if (err.message === 'NO_WALLET_FOUND') {
+        console.info('No extension injected in browser, launching Midnight DApp connector modal.');
         setError('NO_WALLET_FOUND');
       } else {
+        console.error('Wallet connection error:', err);
         setError(err.message || 'Authorization rejected or extension communication error');
       }
       return false;

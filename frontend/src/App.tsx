@@ -211,10 +211,14 @@ export const App: React.FC = () => {
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }}
               onCreateRfpClick={() => setIsCreateOpen(true)}
+              onDocsClick={() => {
+                setActiveFilter('DOCS');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
             />
 
             {/* 2. Live Telemetry Strip */}
-            <div style={{ marginBottom: '2.5rem' }}>
+            <div id="telemetry-section" style={{ marginBottom: '2.5rem', scrollMarginTop: '100px' }}>
               <NetworkTelemetry network={network} />
             </div>
 

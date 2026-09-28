@@ -80,6 +80,30 @@ export function useMidnightWallet() {
     return () => clearTimeout(timer);
   }, [discoverInstalledWallets]);
 
+  const cleanAddressString = (val: any): string => {
+    if (!val) return '';
+    if (typeof val === 'string') {
+      const trimmed = val.trim();
+      if (!trimmed || trimmed === '[object Object]' || trimmed.includes('[object')) return '';
+      return trimmed;
+    }
+    if (typeof val === 'object') {
+      if (typeof val.address === 'string') return cleanAddressString(val.address);
+      if (typeof val.unshieldedAddress === 'string') return cleanAddressString(val.unshieldedAddress);
+      if (typeof val.shieldedAddress === 'string') return cleanAddressString(val.shieldedAddress);
+      if (typeof val.bech32 === 'string') return cleanAddressString(val.bech32);
+      if (typeof val.asString === 'function') {
+        const s = val.asString();
+        if (typeof s === 'string') return cleanAddressString(s);
+      }
+      if (typeof val.toString === 'function') {
+        const s = val.toString();
+        if (typeof s === 'string' && s !== '[object Object]' && !s.includes('[object')) return cleanAddressString(s);
+      }
+    }
+    return '';
+  };
+
   // Extract address via resilient multi-method cascade
   const extractAddress = async (api: any): Promise<string> => {
     if (!api) return '';
@@ -88,7 +112,8 @@ export function useMidnightWallet() {
     try {
       if (typeof api.getUnshieldedAddress === 'function') {
         const res = await api.getUnshieldedAddress();
-        if (res) return res.toString();
+        const cleaned = cleanAddressString(res);
+        if (cleaned) return cleaned;
       }
     } catch (e) {
       console.warn('getUnshieldedAddress query notice:', e);
@@ -98,7 +123,10 @@ export function useMidnightWallet() {
     try {
       if (typeof api.getShieldedAddresses === 'function') {
         const addrs = await api.getShieldedAddresses();
-        if (Array.isArray(addrs) && addrs.length > 0) return addrs[0].toString();
+        if (Array.isArray(addrs) && addrs.length > 0) {
+          const cleaned = cleanAddressString(addrs[0]);
+          if (cleaned) return cleaned;
+        }
       }
     } catch (e) {
       console.warn('getShieldedAddresses query notice:', e);
@@ -108,7 +136,8 @@ export function useMidnightWallet() {
     try {
       if (typeof api.getDustAddress === 'function') {
         const dustAddr = await api.getDustAddress();
-        if (dustAddr) return dustAddr.toString();
+        const cleaned = cleanAddressString(dustAddr);
+        if (cleaned) return cleaned;
       }
     } catch (e) {
       console.warn('getDustAddress query notice:', e);
@@ -118,7 +147,8 @@ export function useMidnightWallet() {
     try {
       if (typeof api.state === 'function') {
         const st = await api.state();
-        if (st?.address) return st.address.toString();
+        const cleaned = cleanAddressString(st?.address) || cleanAddressString(st?.unshieldedAddress);
+        if (cleaned) return cleaned;
       }
     } catch (e) {
       console.warn('state() query notice:', e);
@@ -154,9 +184,12 @@ export function useMidnightWallet() {
       setConnectorInstance(connectedApi);
 
       const address = await extractAddress(connectedApi);
-      const displayAddress = address || (network === 'preview' 
-        ? 'mn_addr_preview108ezrx3t5syg4g9a3y3ykavl73ftl6nnn0ntctldpegl3f5l7acssug02u' 
-        : 'mn_addr_preprod1yrl238vvh3l662yypvucq4zltgfy0633a2cj9mn76us0tlnql6assr2ga7');
+      const cleaned = cleanAddressString(address);
+      const displayAddress = (cleaned && cleaned.length > 10) 
+        ? cleaned 
+        : (network === 'preview' 
+            ? 'mn_addr_preview108ezrx3t5syg4g9a3y3ykavl73ftl6nnn0ntctldpegl3f5l7acssug02u' 
+            : 'mn_addr_preprod1yrl238vvh3l662yypvucq4zltgfy0633a2cj9mn76us0tlnql6assr2ga7');
 
       setWallet({
         address: displayAddress,

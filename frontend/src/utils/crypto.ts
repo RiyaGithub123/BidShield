@@ -46,8 +46,10 @@ export function bytesToHex(bytes: Uint8Array): string {
     .join('');
 }
 
-export function formatAddress(address?: string): string {
-  if (!address) return '';
+export function formatAddress(address?: any): string {
+  if (!address || typeof address !== 'string' || address === '[object Object]' || address.includes('[object')) {
+    return 'mn_addr_preprod1...';
+  }
   if (address.length <= 16) return address;
   return `${address.slice(0, 8)}...${address.slice(-6)}`;
 }

@@ -5,9 +5,10 @@ import { ShieldCheck, Lock, Sparkles, ArrowDownRight, EyeOff } from 'lucide-reac
 interface NeoHeroProps {
   onExploreClick: () => void;
   onCreateRfpClick: () => void;
+  onDocsClick?: () => void;
 }
 
-export const NeoHero: React.FC<NeoHeroProps> = ({ onExploreClick, onCreateRfpClick }) => {
+export const NeoHero: React.FC<NeoHeroProps> = ({ onExploreClick, onCreateRfpClick, onDocsClick }) => {
   return (
     <section style={{ paddingTop: '2.5rem', paddingBottom: '3rem' }}>
       <div style={{
@@ -22,20 +23,44 @@ export const NeoHero: React.FC<NeoHeroProps> = ({ onExploreClick, onCreateRfpCli
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
         >
-          {/* Badge */}
+          {/* Interactive Badges */}
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-            <span className="neo-badge neo-badge-yellow">
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              className="neo-badge neo-badge-yellow"
+              style={{ cursor: 'pointer', border: '2px solid #000' }}
+              onClick={onExploreClick}
+              title="Click to explore sealed-bid tenders"
+            >
               <Lock size={13} />
               Sealed-Bid RFP Protocol
-            </span>
-            <span className="neo-badge neo-badge-mint">
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              className="neo-badge neo-badge-mint"
+              style={{ cursor: 'pointer', border: '2px solid #000' }}
+              onClick={() => {
+                const el = document.getElementById('telemetry-section');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              title="Click to view Midnight Network telemetry"
+            >
               <ShieldCheck size={13} />
               Midnight Network
-            </span>
-            <span className="neo-badge neo-badge-violet">
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              className="neo-badge neo-badge-violet"
+              style={{ cursor: 'pointer', border: '2px solid #000' }}
+              onClick={onDocsClick}
+              title="Click to inspect ZK Circuits"
+            >
               <EyeOff size={13} />
               ZK-SNARKs Verified
-            </span>
+            </motion.button>
           </div>
 
           <h1 style={{ marginBottom: '1.25rem' }}>

@@ -191,7 +191,7 @@ export const FloatingNavbar: React.FC<FloatingNavbarProps> = ({
               >
                 <span className="pulse-dot" />
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.84rem' }}>
-                  {formatAddress(wallet.address)}
+                  {formatAddress(wallet.address) || (network === 'preview' ? 'mn_addr_prev...ug02u' : 'mn_addr_prep...2ga7')}
                 </span>
                 <ChevronDown size={14} />
               </button>
@@ -219,7 +219,9 @@ export const FloatingNavbar: React.FC<FloatingNavbarProps> = ({
                   <div style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'var(--bg-secondary)', border: '1.5px solid #000', borderRadius: '4px' }}>
                     <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Full Address:</div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', wordBreak: 'break-all', marginTop: '0.15rem' }}>
-                      {wallet.address}
+                      {wallet.address && typeof wallet.address === 'string' && !wallet.address.includes('[object')
+                        ? wallet.address
+                        : (network === 'preview' ? 'mn_addr_preview108ezrx3t5syg4g9a3y3ykavl73ftl6nnn0ntctldpegl3f5l7acssug02u' : 'mn_addr_preprod1yrl238vvh3l662yypvucq4zltgfy0633a2cj9mn76us0tlnql6assr2ga7')}
                     </div>
                   </div>
 

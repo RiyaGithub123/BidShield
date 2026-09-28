@@ -23,8 +23,8 @@
 | **Level 5: User Validation** | 50 Early Verified Users | Cohort 1 On-Chain Testnet Participants | [`USERS.md`](USERS.md) | **50 / 50 ✅** |
 | **Level 5: Feedback Matrix** | Code-to-Commit Traceability | Verbatim Feedback Resolved by Git Commits | [`FEEDBACK.md`](FEEDBACK.md) | **RESOLVED ✅** |
 | **Level 6: Post-Launch Cohort** | 20 Launch Testnet Users | Cohort 2 Verified Preprod Onboarding | [`LAUNCH_USERS.md`](LAUNCH_USERS.md) | **20 / 20 ✅** |
-| **Level 6: Raw Review Dataset** | Customer Reviews & CSV Export | Structured CSV with Mixed Ratings | [`FEEDBACK.csv`](FEEDBACK.csv) | **EXPORTED ✅** |
-| **Level 6: Public Feedback Form** | Community Survey Channel | Live Feedback Survey | [Google Feedback Form](https://forms.gle/bidshield-feedback) | **LIVE 📋** |
+| **Level 6: Raw Review Dataset** | Customer Reviews & CSV Export | Structured CSV with Mixed Ratings | [`FEEDBACK.csv`](FEEDBACK.csv) & [Live Google Sheet](https://docs.google.com/spreadsheets/d/18tpSi3y6I2oKxWDkObl7RhVwwUzBVtuJ4jL-15vApgY/edit?usp=sharing) | **EXPORTED ✅** |
+| **Level 6: Public Feedback Form** | Community Survey Channel | Live Feedback Survey | [Google Feedback Form](https://docs.google.com/forms/d/e/1FAIpQLSfgDmijFVyHjYgssFxqKYkTEpkJtEu6pUdC-X7Wo305qPYNuw/viewform) | **LIVE 📋** |
 | **Level 6: Developer Playbook** | Midnight Gotchas & Solutions | 10 Generalized Midnight Pitfalls | [`MIDNIGHT_DEVELOPER_PITFALLS_AND_SOLUTIONS.md`](MIDNIGHT_DEVELOPER_PITFALLS_AND_SOLUTIONS.md) | **COMMITTED 📘** |
 
 ---
@@ -164,6 +164,8 @@ BidShield features an unapologetic, high-performance **Neo-Brutalism (Neubrutali
 - **Cohort 1 (Level 5 Validation)**: 50 Users tested early iterations across Preview and Preprod. Full records in [`USERS.md`](USERS.md).
 - **Cohort 2 (Level 6 Launch)**: 20 Post-Launch Users tested the live Preprod contract with real commitments. Full records and quotes in [`LAUNCH_USERS.md`](LAUNCH_USERS.md).
 - **Total Combined Users**: **70 / 70 Verified On-Chain Participants**.
+- **Community Demographic**: Comprises Kolkata & West Bengal Web3 builders, university engineering researchers, and international Midnight contributors (~88% Indian developer ecosystem).
+- **Live Feedback Registries**: [Public Google Form](https://docs.google.com/forms/d/e/1FAIpQLSfgDmijFVyHjYgssFxqKYkTEpkJtEu6pUdC-X7Wo305qPYNuw/viewform) & [Live Google Sheets Audit](https://docs.google.com/spreadsheets/d/18tpSi3y6I2oKxWDkObl7RhVwwUzBVtuJ4jL-15vApgY/edit?usp=sharing).
 
 ### B. Feedback-Driven Code Evolution
 Community feedback directly shaped our codebase across both milestones:

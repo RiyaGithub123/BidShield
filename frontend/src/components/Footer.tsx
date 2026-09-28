@@ -97,16 +97,26 @@ export const Footer: React.FC<FooterProps> = ({ network }) => {
             <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
               Help shape confidential procurement on Midnight. Share feedback on wallet connection and proving UX:
             </p>
-            <a
-              href="https://forms.gle/bidshield-feedback"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="neo-btn neo-btn-mint neo-btn-sm"
-              style={{ display: 'inline-flex', width: 'auto' }}
-            >
-              <MessageSquare size={14} />
-              Open Feedback Form
-            </a>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSfgDmijFVyHjYgssFxqKYkTEpkJtEu6pUdC-X7Wo305qPYNuw/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="neo-btn neo-btn-mint neo-btn-sm"
+                style={{ display: 'inline-flex', width: 'auto' }}
+              >
+                <MessageSquare size={14} />
+                Open Feedback Form
+              </a>
+              <a
+                href="https://docs.google.com/spreadsheets/d/18tpSi3y6I2oKxWDkObl7RhVwwUzBVtuJ4jL-15vApgY/edit?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontSize: '0.78rem', color: 'var(--black)', textDecoration: 'underline', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+              >
+                View Live Audit Sheet <ExternalLink size={11} />
+              </a>
+            </div>
           </div>
 
           {/* Network Specs */}

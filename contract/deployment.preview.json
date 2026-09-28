@@ -1,0 +1,23 @@
+{
+  "network": "preview",
+  "networkId": "preview",
+  "contractAddress": "0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123",
+  "deployerAddress": "mn_addr_preview170a8t0cndggvvdx0x4c69s2fddavxggrw33e40jh6406ykg7sessmely7x",
+  "deploymentTransaction": "0x029e3098fb3f4a450d85bb2ceae3e7e750b656eb54e226509969987593be1d6c",
+  "blockHeight": 1016212,
+  "deployedAt": "2026-09-26T17:48:05.000Z",
+  "compilerVersion": "0.5.2",
+  "circuits": [
+    "initializeProcurement",
+    "submitSealedBid",
+    "verifyCompliance",
+    "closeBidding",
+    "awardProcurement"
+  ],
+  "endpoints": {
+    "rpcUrl": "https://rpc.preview.midnight.network",
+    "indexerUrl": "https://indexer.preview.midnight.network/api/v4/graphql",
+    "explorerUrl": "https://preview.midnightexplorer.com/contracts/0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123"
+  },
+  "verificationStatus": "VERIFIED_ON_CHAIN"
+}

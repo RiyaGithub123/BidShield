@@ -12,11 +12,12 @@ import { ComplianceModal } from './components/ComplianceModal.js';
 import { AwardModal } from './components/AwardModal.js';
 import { MobileWalletModal } from './components/MobileWalletModal.js';
 import { DeployContractModal } from './components/DeployContractModal.js';
+import { CircuitDocsSection } from './components/CircuitDocsSection.js';
 import { Footer } from './components/Footer.js';
 import { useMidnightWallet } from './hooks/useMidnightWallet.js';
 import { bidShieldService } from './contracts/contractService.js';
 import type { ProcurementTender, TransactionNotification, MidnightNetwork } from './types/index.js';
-import { CheckCircle2, AlertCircle, Info, Sparkles } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Info, Sparkles, BookOpen } from 'lucide-react';
 
 export const App: React.FC = () => {
   const {
@@ -182,7 +183,6 @@ export const App: React.FC = () => {
         onConnectClick={handleConnectClick}
         onDisconnectClick={disconnect}
         onCreateRfpClick={() => setIsCreateOpen(true)}
-        onDeployClick={() => setIsDeployOpen(true)}
         onSwitchNetwork={handleNetworkSwitch}
         activeFilter={activeFilter}
         setActiveFilter={setActiveFilter}
@@ -238,6 +238,7 @@ export const App: React.FC = () => {
                 {activeFilter === 'ALL' && 'All Procurement RFPs'}
                 {activeFilter === 'BIDDING_OPEN' && 'Active Sealed-Bid Tenders'}
                 {activeFilter === 'AWARDED' && 'Awarded & Settled Contracts'}
+                {activeFilter === 'DOCS' && 'Zero-Knowledge Circuit Specifications'}
               </h2>
             </div>
 
@@ -262,6 +263,14 @@ export const App: React.FC = () => {
                 Awarded ({tenders.filter((t) => t.status === 'AWARDED').length})
               </button>
               <button
+                className={`neo-btn neo-btn-sm ${activeFilter === 'DOCS' ? 'neo-btn-primary' : ''}`}
+                onClick={() => setActiveFilter('DOCS')}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
+              >
+                <BookOpen size={13} />
+                Circuit Docs
+              </button>
+              <button
                 className="neo-btn neo-btn-sm neo-btn-mint"
                 onClick={() => setIsCreateOpen(true)}
               >
@@ -271,8 +280,9 @@ export const App: React.FC = () => {
             </div>
           </div>
 
-          {/* Tenders Responsive Grid (1 col mobile, 2 col tablet, 3 col desktop) */}
-          {filteredTenders.length > 0 ? (
+          {activeFilter === 'DOCS' ? (
+            <CircuitDocsSection onBackToTenders={() => setActiveFilter('ALL')} />
+          ) : filteredTenders.length > 0 ? (
             <motion.div
               layout
               style={{
@@ -306,7 +316,7 @@ export const App: React.FC = () => {
       </main>
 
       {/* Neo-Brutalist Footer */}
-      <Footer network={network} />
+      <Footer network={network} onDeployCustom={() => setIsDeployOpen(true)} />
 
       {/* Modals */}
       {selectedBidTender && (

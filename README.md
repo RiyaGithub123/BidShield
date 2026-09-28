@@ -1,9 +1,14 @@
+<p align="center">
+  <img src="assets/bidshield_logo.jpg" alt="BidShield Logo" width="220" style="border: 3px solid #000; box-shadow: 6px 6px 0px #000; border-radius: 12px; margin-bottom: 8px;" />
+</p>
+
 # BidShield 🛡️
 ### Confidential Sealed-Bid Procurement & Reverse Auctions on Midnight Network
 
 [![Midnight Network](https://img.shields.io/badge/Midnight-Preview%20%26%20Preprod-00E599?style=for-the-badge&logo=blockchain)](https://midnight.network)
 [![Compact Compiler](https://img.shields.io/badge/Compact-0.5.2-FFE600?style=for-the-badge)](https://midnight.network)
 [![License](https://img.shields.io/badge/License-Apache%202.0-10b981?style=for-the-badge)](LICENSE)
+[![Circuit Docs](https://img.shields.io/badge/Circuit%20Docs-5%20ZK%20Circuits-4C6EF5?style=for-the-badge)](docs/CIRCUITS.md)
 [![X Profile](https://img.shields.io/badge/X%20(Twitter)-@BidShieldApp-1da1f2?style=for-the-badge&logo=x)](https://x.com/BidShieldApp)
 [![Testnet Users](https://img.shields.io/badge/Verified%20Users-75%20On--Chain-7928CA?style=for-the-badge)](USERS.md)
 [![Launch Users](https://img.shields.io/badge/Launch%20Cohort-25%20Post--Launch-FF5376?style=for-the-badge)](LAUNCH_USERS.md)
@@ -13,12 +18,22 @@
 
 ---
 
+### 🌐 Official Deployed Smart Contracts
+
+| Network Target | Contract Address (64-char Hex) | Status | Midnight Block Explorer | Subscan Tracker |
+|:---|:---|:---:|:---:|:---:|
+| **Midnight Preprod** | `fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b` | **LIVE & ACTIVE (75+ Txns)** | [Inspect Preprod Contract](https://preprod.midnightexplorer.com/contracts/fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b) | [Deployer on Subscan](https://midnight-preprod.subscan.io/account/mn_addr_preprod170a8t0cndggvvdx0x4c69s2fddavxggrw33e40jh6406ykg7sessmcp5dm) |
+| **Midnight Preview** | `0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123` | **LIVE & VERIFIED** | [Inspect Preview Contract](https://preview.midnightexplorer.com/contracts/0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123) | [Preview Explorer](https://preview.midnightexplorer.com) |
+
+---
+
 ## 🏆 Submission Checklist & Evaluation Evidence
 
 | Challenge Milestone | Evaluation Requirement | Submission Item & Evidence | Verification Link | Status |
 |:---|:---|:---|:---|:---:|
 | **Level 4: Testnet & CI/CD** | Live Preprod Smart Contract | Compact Contract (5 circuits) on Preprod | [`fc67e2850565...`](https://preprod.midnightexplorer.com/contracts/fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b) | **VERIFIED ✅** |
 | **Level 4: Multi-Network** | Preview Testnet Deployment | Secondary Verified Deployment on Preview | [`0794f000c144...`](https://preview.midnightexplorer.com/contracts/0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123) | **VERIFIED ✅** |
+| **Level 4: Circuit Architecture** | 5 Zero-Knowledge Circuits | Formal Compact Circuit Specs & Invariants | [`docs/CIRCUITS.md`](docs/CIRCUITS.md) | **DOCUMENTED ✅** |
 | **Level 4: Automated CI/CD** | GitHub Actions Pipeline | 3 Automated Jobs (Tests, Build, Indexer) | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) | **PASSING ✅** |
 | **Level 5: User Validation** | 50 Early Verified Users | Cohort 1 On-Chain Testnet Participants | [`USERS.md`](USERS.md) | **50 / 50 ✅** |
 | **Level 5: Feedback Matrix** | Code-to-Commit Traceability | Verbatim Feedback Resolved by Git Commits | [`FEEDBACK.md`](FEEDBACK.md) | **RESOLVED ✅** |
@@ -26,6 +41,7 @@
 | **Level 6: Raw Review Dataset** | Customer Reviews & CSV Export | Structured CSV with Mixed Ratings | [`FEEDBACK.csv`](FEEDBACK.csv) & [Live Google Sheet](https://docs.google.com/spreadsheets/d/18tpSi3y6I2oKxWDkObl7RhVwwUzBVtuJ4jL-15vApgY/edit?usp=sharing) | **EXPORTED ✅** |
 | **Level 6: Public Feedback Form** | Community Survey Channel | Live Feedback Survey | [Google Feedback Form](https://docs.google.com/forms/d/e/1FAIpQLSfgDmijFVyHjYgssFxqKYkTEpkJtEu6pUdC-X7Wo305qPYNuw/viewform) | **LIVE 📋** |
 | **Level 6: Developer Playbook** | Midnight Gotchas & Solutions | 10 Generalized Midnight Pitfalls | [`MIDNIGHT_DEVELOPER_PITFALLS_AND_SOLUTIONS.md`](MIDNIGHT_DEVELOPER_PITFALLS_AND_SOLUTIONS.md) | **COMMITTED 📘** |
+| **Level 6: Video Walkthrough** | Demo Recording Guide | Scene-by-Scene Click & Narration Script | [`docs/YOUTUBE_DEMO_SCRIPT.md`](docs/YOUTUBE_DEMO_SCRIPT.md) | **SCRIPTED 🎥** |
 
 ---
 

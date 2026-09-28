@@ -5,9 +5,10 @@ import { NETWORK_CONFIGS } from '../contracts/contractService.js';
 
 interface FooterProps {
   network: MidnightNetwork;
+  onDeployCustom?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ network }) => {
+export const Footer: React.FC<FooterProps> = ({ network, onDeployCustom }) => {
   const config = NETWORK_CONFIGS[network];
 
   return (
@@ -136,10 +137,27 @@ export const Footer: React.FC<FooterProps> = ({ network }) => {
               <div style={{ marginTop: '0.25rem', wordBreak: 'break-all' }}>
                 Contract: {config.contractAddress}
               </div>
-              <div style={{ marginTop: '0.4rem' }}>
+              <div style={{ marginTop: '0.4rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
                 <span className="neo-badge neo-badge-yellow" style={{ fontSize: '0.65rem' }}>
                   ZK-Proof Verified
                 </span>
+                {onDeployCustom && (
+                  <button
+                    onClick={onDeployCustom}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      textDecoration: 'underline',
+                      fontSize: '0.7rem',
+                      cursor: 'pointer',
+                      fontFamily: 'var(--font-mono)',
+                      color: 'var(--text-secondary)',
+                    }}
+                    title="Deploy a custom contract instance"
+                  >
+                    Deploy Instance
+                  </button>
+                )}
               </div>
             </div>
           </div>

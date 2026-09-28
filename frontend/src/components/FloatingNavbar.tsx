@@ -27,11 +27,32 @@ export const FloatingNavbar: React.FC<FloatingNavbarProps> = ({
   const [showWalletMenu, setShowWalletMenu] = useState(false);
   const [showNetworkMenu, setShowNetworkMenu] = useState(false);
 
+  const handleNavigate = (filter: string) => {
+    setActiveFilter(filter);
+    if (filter === 'DOCS') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setTimeout(() => {
+        const el = document.getElementById('tenders-section');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 60);
+    }
+  };
+
   return (
     <header className="neo-navbar">
       <div className="container neo-navbar-inner">
         {/* Brand & Logo */}
-        <div className="neo-brand" onClick={() => setActiveFilter('ALL')}>
+        <div
+          className="neo-brand"
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            setActiveFilter('ALL');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        >
           <img src="/images/bidshield_logo.jpg" alt="BidShield Logo" className="neo-brand-logo" />
           <div>
             <div className="neo-brand-name">BidShield</div>
@@ -43,25 +64,25 @@ export const FloatingNavbar: React.FC<FloatingNavbarProps> = ({
         <div className="neo-segmented-group desktop-only">
           <button
             className={`neo-segmented-item ${activeFilter === 'ALL' ? 'active' : ''}`}
-            onClick={() => setActiveFilter('ALL')}
+            onClick={() => handleNavigate('ALL')}
           >
             All Tenders
           </button>
           <button
             className={`neo-segmented-item ${activeFilter === 'BIDDING_OPEN' ? 'active' : ''}`}
-            onClick={() => setActiveFilter('BIDDING_OPEN')}
+            onClick={() => handleNavigate('BIDDING_OPEN')}
           >
             Active Bidding
           </button>
           <button
             className={`neo-segmented-item ${activeFilter === 'AWARDED' ? 'active' : ''}`}
-            onClick={() => setActiveFilter('AWARDED')}
+            onClick={() => handleNavigate('AWARDED')}
           >
             Awarded
           </button>
           <button
             className={`neo-segmented-item ${activeFilter === 'DOCS' ? 'active' : ''}`}
-            onClick={() => setActiveFilter('DOCS')}
+            onClick={() => handleNavigate('DOCS')}
             style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
           >
             <BookOpen size={13} />

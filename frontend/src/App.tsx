@@ -190,129 +190,146 @@ export const App: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="container" style={{ flexGrow: 1 }}>
-        {/* 1. Hero Section */}
-        <NeoHero
-          onExploreClick={() => {
-            const el = document.getElementById('tenders-section');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
-          onCreateRfpClick={() => setIsCreateOpen(true)}
-        />
-
-        {/* 2. Live Telemetry Strip */}
-        <div style={{ marginBottom: '2.5rem' }}>
-          <NetworkTelemetry network={network} />
-        </div>
-
-        {/* 3. Interactive Architecture & Zero-Knowledge Simulator Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-          gap: '2rem',
-          marginBottom: '4rem',
-        }}>
-          {/* Prover-to-Verifier Interactive Circuit Playground */}
-          <InteractiveZkPlayground />
-
-          {/* Dual-State Privacy Architecture Visualizer */}
-          <PrivacyArchitectureVisualizer />
-        </div>
-
-        {/* 4. Active Procurement Tenders Section */}
-        <section id="tenders-section" style={{ marginBottom: '4rem' }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '1rem',
-            marginBottom: '1.75rem',
-            borderBottom: '3px solid #000',
-            paddingBottom: '1rem',
-          }}>
-            <div>
-              <span className="neo-badge neo-badge-yellow" style={{ marginBottom: '0.4rem' }}>
-                Procurement Vault
-              </span>
-              <h2>
-                {activeFilter === 'ALL' && 'All Procurement RFPs'}
-                {activeFilter === 'BIDDING_OPEN' && 'Active Sealed-Bid Tenders'}
-                {activeFilter === 'AWARDED' && 'Awarded & Settled Contracts'}
-                {activeFilter === 'DOCS' && 'Zero-Knowledge Circuit Specifications'}
-              </h2>
-            </div>
-
-            {/* Mobile / Secondary Filter Controls */}
-            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-              <button
-                className={`neo-btn neo-btn-sm ${activeFilter === 'ALL' ? 'neo-btn-primary' : ''}`}
-                onClick={() => setActiveFilter('ALL')}
-              >
-                All ({tenders.length})
-              </button>
-              <button
-                className={`neo-btn neo-btn-sm ${activeFilter === 'BIDDING_OPEN' ? 'neo-btn-primary' : ''}`}
-                onClick={() => setActiveFilter('BIDDING_OPEN')}
-              >
-                Open ({tenders.filter((t) => t.status === 'BIDDING_OPEN').length})
-              </button>
-              <button
-                className={`neo-btn neo-btn-sm ${activeFilter === 'AWARDED' ? 'neo-btn-primary' : ''}`}
-                onClick={() => setActiveFilter('AWARDED')}
-              >
-                Awarded ({tenders.filter((t) => t.status === 'AWARDED').length})
-              </button>
-              <button
-                className={`neo-btn neo-btn-sm ${activeFilter === 'DOCS' ? 'neo-btn-primary' : ''}`}
-                onClick={() => setActiveFilter('DOCS')}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
-              >
-                <BookOpen size={13} />
-                Circuit Docs
-              </button>
-              <button
-                className="neo-btn neo-btn-sm neo-btn-mint"
-                onClick={() => setIsCreateOpen(true)}
-              >
-                <Sparkles size={13} />
-                New RFP
-              </button>
-            </div>
-          </div>
-
-          {activeFilter === 'DOCS' ? (
-            <CircuitDocsSection onBackToTenders={() => setActiveFilter('ALL')} />
-          ) : filteredTenders.length > 0 ? (
-            <motion.div
-              layout
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-                gap: '1.75rem',
+        {activeFilter === 'DOCS' ? (
+          <div style={{ paddingTop: '2.5rem' }}>
+            <CircuitDocsSection
+              onBackToTenders={() => {
+                setActiveFilter('ALL');
+                setTimeout(() => {
+                  const el = document.getElementById('tenders-section');
+                  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 60);
               }}
-            >
-              {filteredTenders.map((tender) => (
-                <ProcurementCard
-                  key={tender.id}
-                  tender={tender}
-                  onSubmitBidClick={(t) => setSelectedBidTender(t)}
-                  onVerifyComplianceClick={(t) => setComplianceTender(t)}
-                  onAwardClick={(t) => setAwardTender(t)}
-                />
-              ))}
-            </motion.div>
-          ) : (
-            <div className="neo-card" style={{ textAlign: 'center', padding: '4rem 1.5rem', background: '#FFFFFF' }}>
-              <p style={{ fontSize: '1.1rem', marginBottom: '1.5rem', color: 'var(--text-secondary)' }}>
-                No procurement tenders found for the active filter.
-              </p>
-              <button className="neo-btn neo-btn-primary" onClick={() => setIsCreateOpen(true)}>
-                <Sparkles size={16} />
-                Publish First Procurement Tender
-              </button>
+            />
+          </div>
+        ) : (
+          <>
+            {/* 1. Hero Section */}
+            <NeoHero
+              onExploreClick={() => {
+                const el = document.getElementById('tenders-section');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              onCreateRfpClick={() => setIsCreateOpen(true)}
+            />
+
+            {/* 2. Live Telemetry Strip */}
+            <div style={{ marginBottom: '2.5rem' }}>
+              <NetworkTelemetry network={network} />
             </div>
-          )}
-        </section>
+
+            {/* 3. Interactive Architecture & Zero-Knowledge Simulator Grid */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+              gap: '2rem',
+              marginBottom: '4rem',
+            }}>
+              {/* Prover-to-Verifier Interactive Circuit Playground */}
+              <InteractiveZkPlayground />
+
+              {/* Dual-State Privacy Architecture Visualizer */}
+              <PrivacyArchitectureVisualizer />
+            </div>
+
+            {/* 4. Active Procurement Tenders Section */}
+            <section id="tenders-section" style={{ marginBottom: '4rem', scrollMarginTop: '100px' }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '1rem',
+                marginBottom: '1.75rem',
+                borderBottom: '3px solid #000',
+                paddingBottom: '1rem',
+              }}>
+                <div>
+                  <span className="neo-badge neo-badge-yellow" style={{ marginBottom: '0.4rem' }}>
+                    Procurement Vault
+                  </span>
+                  <h2>
+                    {activeFilter === 'ALL' && 'All Procurement RFPs'}
+                    {activeFilter === 'BIDDING_OPEN' && 'Active Sealed-Bid Tenders'}
+                    {activeFilter === 'AWARDED' && 'Awarded & Settled Contracts'}
+                  </h2>
+                </div>
+
+                {/* Mobile / Secondary Filter Controls */}
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <button
+                    className={`neo-btn neo-btn-sm ${activeFilter === 'ALL' ? 'neo-btn-primary' : ''}`}
+                    onClick={() => setActiveFilter('ALL')}
+                  >
+                    All ({tenders.length})
+                  </button>
+                  <button
+                    className={`neo-btn neo-btn-sm ${activeFilter === 'BIDDING_OPEN' ? 'neo-btn-primary' : ''}`}
+                    onClick={() => setActiveFilter('BIDDING_OPEN')}
+                  >
+                    Open ({tenders.filter((t) => t.status === 'BIDDING_OPEN').length})
+                  </button>
+                  <button
+                    className={`neo-btn neo-btn-sm ${activeFilter === 'AWARDED' ? 'neo-btn-primary' : ''}`}
+                    onClick={() => setActiveFilter('AWARDED')}
+                  >
+                    Awarded ({tenders.filter((t) => t.status === 'AWARDED').length})
+                  </button>
+                  <button
+                    className="neo-btn neo-btn-sm"
+                    onClick={() => {
+                      setActiveFilter('DOCS');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
+                  >
+                    <BookOpen size={13} />
+                    Circuit Docs
+                  </button>
+                  <button
+                    className="neo-btn neo-btn-sm neo-btn-mint"
+                    onClick={() => setIsCreateOpen(true)}
+                  >
+                    <Sparkles size={13} />
+                    New RFP
+                  </button>
+                </div>
+              </div>
+
+              {/* Tenders Responsive Grid (1 col mobile, 2 col tablet, 3 col desktop) */}
+              {filteredTenders.length > 0 ? (
+                <motion.div
+                  layout
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+                    gap: '1.75rem',
+                  }}
+                >
+                  {filteredTenders.map((tender) => (
+                    <ProcurementCard
+                      key={tender.id}
+                      tender={tender}
+                      onSubmitBidClick={(t) => setSelectedBidTender(t)}
+                      onVerifyComplianceClick={(t) => setComplianceTender(t)}
+                      onAwardClick={(t) => setAwardTender(t)}
+                    />
+                  ))}
+                </motion.div>
+              ) : (
+                <div className="neo-card" style={{ textAlign: 'center', padding: '4rem 1.5rem', background: '#FFFFFF' }}>
+                  <p style={{ fontSize: '1.1rem', marginBottom: '1.5rem', color: 'var(--text-secondary)' }}>
+                    No procurement tenders found for the active filter.
+                  </p>
+                  <button className="neo-btn neo-btn-primary" onClick={() => setIsCreateOpen(true)}>
+                    <Sparkles size={16} />
+                    Publish First Procurement Tender
+                  </button>
+                </div>
+              )}
+            </section>
+          </>
+        )}
       </main>
 
       {/* Neo-Brutalist Footer */}

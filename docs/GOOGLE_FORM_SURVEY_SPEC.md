@@ -1,5 +1,7 @@
 # 📋 BidShield Community Feedback Survey — Google Form Specification
-> **Instructions for Bishal / Project Lead**: Use this exact question breakdown to create the Google Form. Once created, connect it to a Google Sheet, and paste the shared links into `README.md` and `FEEDBACK.md`.
+> **Active Google Form**: [https://docs.google.com/forms/d/e/1FAIpQLSfgDmijFVyHjYgssFxqKYkTEpkJtEu6pUdC-X7Wo305qPYNuw/viewform](https://docs.google.com/forms/d/e/1FAIpQLSfgDmijFVyHjYgssFxqKYkTEpkJtEu6pUdC-X7Wo305qPYNuw/viewform)  
+> **Connected Live Google Sheet**: [https://docs.google.com/spreadsheets/d/18tpSi3y6I2oKxWDkObl7RhVwwUzBVtuJ4jL-15vApgY/edit?usp=sharing](https://docs.google.com/spreadsheets/d/18tpSi3y6I2oKxWDkObl7RhVwwUzBVtuJ4jL-15vApgY/edit?usp=sharing)  
+> **Audience**: Kolkata & West Bengal Web3 builders, university engineering researchers, and global Midnight builders (~88% Indian developer ecosystem).
 
 ---
 

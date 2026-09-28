@@ -416,7 +416,7 @@ The table below catalogs every background task executed during development, deta
 ### Step 16: Comprehensive Product Documentation
 - **Objective**: Provide clear, professional, production-focused documentation.
 - **Files Created**:
-  - `README.md`: Comprehensive product overview covering problem statement, privacy architecture, Compact circuit details, ZK privacy matrix, local setup instructions, environment variables guide, and official [@BidShieldApp](https://x.com/BidShieldApp) reference.
+  - `README.md`: Comprehensive product overview covering problem statement, privacy architecture, Compact circuit details, ZK privacy matrix, local setup instructions, environment variables guide, and official [@BidSheild](https://x.com/BidSheild) reference.
   - `docs/ARCHITECTURE.md`: Technical architectural specification with Mermaid sequence and state machine diagrams.
   - `docs/PRIVACY_MODEL.md`: Formal cryptographic analysis of the hiding and binding commitment scheme and attack mitigation.
   - `CHALLENGE_PROGRESS.md`: Internal challenge evaluation checklist (gitignored so it remains private).

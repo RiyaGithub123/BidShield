@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, Twitter, ExternalLink, MessageSquare } from 'lucide-react';
+import { Github, Twitter, ExternalLink, MessageSquare, Youtube } from 'lucide-react';
 import type { MidnightNetwork } from '../types/index.js';
 import { NETWORK_CONFIGS } from '../contracts/contractService.js';
 
@@ -36,7 +36,7 @@ export const Footer: React.FC<FooterProps> = ({ network, onDeployCustom }) => {
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '1rem' }}>
               Confidential Sealed-Bid Procurement & Reverse Auctions built on Midnight Network with Compact Zero-Knowledge Circuits.
             </p>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
               <a
                 href="https://github.com/RiyaGithub123/BidShield"
                 target="_blank"
@@ -48,7 +48,7 @@ export const Footer: React.FC<FooterProps> = ({ network, onDeployCustom }) => {
                 GitHub
               </a>
               <a
-                href="https://x.com/BidShieldApp"
+                href="https://x.com/BidSheild"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="neo-btn neo-btn-sm"
@@ -56,7 +56,18 @@ export const Footer: React.FC<FooterProps> = ({ network, onDeployCustom }) => {
                 title="Official X (Twitter) Profile"
               >
                 <Twitter size={14} />
-                @BidShieldApp
+                @BidSheild
+              </a>
+              <a
+                href="https://youtu.be/ML8AABZC3KI?si=XFMA_hZ1dl2JVWtA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="neo-btn neo-btn-sm"
+                style={{ background: '#FF0000', color: '#fff' }}
+                title="Official YouTube Demo Walkthrough"
+              >
+                <Youtube size={14} />
+                Demo Video
               </a>
             </div>
           </div>

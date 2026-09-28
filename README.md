@@ -7,11 +7,12 @@
 
 [![Midnight Network](https://img.shields.io/badge/Midnight-Preview%20%26%20Preprod-00E599?style=for-the-badge&logo=blockchain)](https://midnight.network)
 [![Compact Compiler](https://img.shields.io/badge/Compact-0.5.2-FFE600?style=for-the-badge)](https://midnight.network)
-[![License](https://img.shields.io/badge/License-Apache%202.0-10b981?style=for-the-badge)](LICENSE)
+[![YouTube Demo](https://img.shields.io/badge/YouTube-Watch%20Demo%20(2x)-FF0000?style=for-the-badge&logo=youtube)](https://youtu.be/ML8AABZC3KI)
+[![X Profile](https://img.shields.io/badge/X%20(Twitter)-@BidSheild-1da1f2?style=for-the-badge&logo=x)](https://x.com/BidSheild)
 [![Circuit Docs](https://img.shields.io/badge/Circuit%20Docs-5%20ZK%20Circuits-4C6EF5?style=for-the-badge)](docs/CIRCUITS.md)
-[![X Profile](https://img.shields.io/badge/X%20(Twitter)-@BidShieldApp-1da1f2?style=for-the-badge&logo=x)](https://x.com/BidShieldApp)
 [![Testnet Users](https://img.shields.io/badge/Verified%20Users-75%20On--Chain-7928CA?style=for-the-badge)](USERS.md)
 [![Launch Users](https://img.shields.io/badge/Launch%20Cohort-25%20Post--Launch-FF5376?style=for-the-badge)](LAUNCH_USERS.md)
+[![License](https://img.shields.io/badge/License-Apache%202.0-10b981?style=for-the-badge)](LICENSE)
 
 > **"Compare bids without exposing the bids."**  
 > BidShield is an enterprise-grade privacy-preserving sealed-bid procurement and reverse auction platform engineered on **Midnight Network**. Organizations publish public tenders with verifiable budget ceilings; suppliers submit confidential sealed bids; the Midnight zero-knowledge smart contract evaluates the optimal condition and awards the contract without ever leaking competing bids or supplier profit margins.
@@ -43,7 +44,37 @@
 | **Level 6: Raw Review Dataset** | Customer Reviews & CSV Export | Structured CSV with Mixed Ratings | [`FEEDBACK.csv`](FEEDBACK.csv) & [Live Google Sheet](https://docs.google.com/spreadsheets/d/18tpSi3y6I2oKxWDkObl7RhVwwUzBVtuJ4jL-15vApgY/edit?usp=sharing) | **EXPORTED ✅** |
 | **Level 6: Public Feedback Form** | Community Survey Channel | Live Feedback Survey | [Google Feedback Form](https://docs.google.com/forms/d/e/1FAIpQLSfgDmijFVyHjYgssFxqKYkTEpkJtEu6pUdC-X7Wo305qPYNuw/viewform) | **LIVE 📋** |
 | **Level 6: Developer Playbook** | Midnight Gotchas & Solutions | 10 Generalized Midnight Pitfalls | [`MIDNIGHT_DEVELOPER_PITFALLS_AND_SOLUTIONS.md`](MIDNIGHT_DEVELOPER_PITFALLS_AND_SOLUTIONS.md) | **COMMITTED 📘** |
-| **Level 6: Video Walkthrough** | Demo Recording Guide | Scene-by-Scene Click & Narration Script | [`docs/YOUTUBE_DEMO_SCRIPT.md`](docs/YOUTUBE_DEMO_SCRIPT.md) | **SCRIPTED 🎥** |
+| **Level 6: Video Walkthrough** | YouTube Demonstration Walkthrough | Full End-to-End Clickthrough & ZK Verification | [Watch on YouTube (2x)](https://youtu.be/ML8AABZC3KI) & [`docs/YOUTUBE_DEMO_SCRIPT.md`](docs/YOUTUBE_DEMO_SCRIPT.md) | **RECORDED & LIVE 🎥** |
+
+---
+
+## 🎥 Video Demonstration Walkthrough
+
+> **Watch the Full Live Video Demo**:  
+> 🔗 **[https://youtu.be/ML8AABZC3KI](https://youtu.be/ML8AABZC3KI)** (Recorded at 2x speed for rapid evaluator verification)  
+> 🐦 Official X (Twitter) Community: **[@BidSheild](https://x.com/BidSheild)**
+
+<p align="center">
+  <a href="https://youtu.be/ML8AABZC3KI" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.youtube.com/vi/ML8AABZC3KI/maxresdefault.jpg" alt="BidShield YouTube Video Walkthrough" width="100%" style="border: 3px solid #000; box-shadow: 6px 6px 0px #000; border-radius: 8px;" />
+  </a>
+</p>
+<p align="center">
+  <em>👆 Click image to watch the full end-to-end demo on YouTube (or watch directly in the live dApp hero view).</em>
+</p>
+
+### ⏱️ Video Chapter Breakdown & Timestamps
+- **0:00 - 0:15**: Neo-Brutalist Dashboard Overview & "Compare Bids Without Exposing Bids" Value Proposition
+- **0:15 - 0:28**: Live Multi-Network Switching (Midnight Preview ➔ Midnight Preprod Testnet)
+- **0:28 - 0:42**: Non-Custodial Midnight Wallet & Instant Demo Sandbox Connection
+- **0:42 - 1:02**: Deep-Dive Inspection of All 5 Compact Zero-Knowledge Circuits (`initializeProcurement`, `submitSealedBid`, `verifyCompliance`, `closeBidding`, `awardProcurement`)
+- **1:02 - 1:18**: Publishing a New Confidential RFP Tender on Midnight Preprod
+- **1:18 - 1:32**: Confidential Sealed-Bid Intake with Client-Side Salt & Cryptographic Hash Commitment
+- **1:32 - 1:44**: Zero-Knowledge Supplier Accreditation & ISO-27001 / SOC2 Proof Generation
+- **1:44 - 1:55**: Post-Deadline Award Settlement & Permanent Sealing of Competing Bids
+- **1:55 - End**: On-Chain Explorer Verification, Official X Profile ([@BidSheild](https://x.com/BidSheild)), and Feedback Form
+
+*Follow the exact physical click-by-click script in [`docs/YOUTUBE_DEMO_SCRIPT.md`](docs/YOUTUBE_DEMO_SCRIPT.md).*
 
 ---
 

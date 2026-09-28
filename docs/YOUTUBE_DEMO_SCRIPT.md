@@ -1,5 +1,7 @@
 # BidShield — Exact Frontend Click-by-Click Recording Guide 🎥
 
+> 📺 **Watch Recorded Live Demo (2x Speed)**: [https://youtu.be/ML8AABZC3KI](https://youtu.be/ML8AABZC3KI)  
+> 🐦 **Official X (Twitter) Profile**: [@BidSheild](https://x.com/BidSheild)  
 > **Verified Live via Chrome DevTools**: Every single button, chip, tab, and modal in this guide matches the exact labels, colors, and layout rendered in the production application.  
 > **Format**: Pure arrow-by-arrow (`➔`) physical actions. No speech/narration text. Covers all 5 Midnight Compact Zero-Knowledge circuits.
 
@@ -50,7 +52,7 @@ Open http://localhost:5173/ (or https://bid-shield-frontend.vercel.app/)
 [Center Navbar] Click [AWARDED] ➔ Point cursor to [AWARDED WINNING CONTRACT] box & "🔒 Competitor bids remain sealed forever"
        │
        ▼
-Scroll to Bottom Footer ➔ Hover [GITHUB] ➔ Hover [@BIDSHIELDAPP] ➔ Hover [OPEN FEEDBACK FORM] ➔ Stop recording! 🎬
+Scroll to Bottom Footer ➔ Hover [GITHUB] ➔ Hover [@BIDSHEILD] ➔ Hover [DEMO VIDEO] ➔ Hover [OPEN FEEDBACK FORM] ➔ Stop recording! 🎬
 ```
 
 ---
@@ -154,7 +156,8 @@ Scroll to Bottom Footer ➔ Hover [GITHUB] ➔ Hover [@BIDSHIELDAPP] ➔ Hover [
 ### STEP 9: Footer Links & Network Specs (Bottom of Page)
 `Scroll page down to bottom footer`  
 `➔ Hover mouse over [GITHUB] button`  
-`➔ Hover mouse over [@BIDSHIELDAPP] button (blue Twitter button)`  
+`➔ Hover mouse over [@BIDSHEILD] button (blue Twitter button)`  
+`➔ Hover mouse over [DEMO VIDEO] button (red YouTube button)`  
 `➔ Hover mouse over [OPEN FEEDBACK FORM] (mint green button)`  
 `➔ Hover mouse over [View Live Audit Sheet] (underlined link)`  
 `➔ Hover mouse over "NETWORK SPECS" box showing Contract "fc67e285..." (or "0794f000...")`  

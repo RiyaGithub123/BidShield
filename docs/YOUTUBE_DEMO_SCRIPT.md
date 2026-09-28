@@ -1,123 +1,173 @@
-# BidShield — Simple Arrow-by-Arrow Video Recording Guide 🎥
+# BidShield — Exact Frontend Click-by-Click Recording Guide 🎥
 
-> **Format**: Pure physical mouse actions, button clicks, and arrow sequences (`➔`). No narration text. Includes demonstration of all 5 Zero-Knowledge circuits.
-
----
-
-## 🧭 Master Recording Flowchart
-
-```
-Start at http://localhost:5173/ (or Vercel deployment)
-       │
-       ▼
-Move to top right ➔ Click [🌐 Network ▼] ➔ Click [Preprod Testnet] ➔ Hover Telemetry Strip
-       │
-       ▼
-Move to top right ➔ Click [Connect Wallet] (mint green) ➔ Click [Approve] in 1AM Wallet
-       │
-       ▼
-Move to top navbar ➔ Click [Circuit Docs]
-       │
-       ├─➔ Click [1. initializeProcurement] ➔ View inputs & Compact code
-       ├─➔ Click [2. submitSealedBid] ➔ View private witnesses ➔ Click [Copy Code]
-       ├─➔ Click [3. verifyCompliance] ➔ View persistent hash accreditation
-       ├─➔ Click [4. closeBidding] ➔ View deadline enforcement
-       └─➔ Click [5. awardProcurement] ➔ View selective disclosure
-       │
-       ▼
-Move to top navbar ➔ Click [Tenders] (returns to tender grid)
-       │
-       ▼
-Move to top right ➔ Click [✨ Publish RFP] ➔ Type Title ➔ Type Budget "500000" ➔ Click [Publish Procurement RFP ➔]
-       │
-       ▼
-Move to first tender card ➔ Click [🔒 Submit Sealed Bid] ➔ Type "420000" ➔ Click [↻] Salt ➔ Point to 32-Byte Hash ➔ Click [Submit Sealed Bid ➔]
-       │
-       ▼
-Move to tender card ➔ Click [✓ Verify Compliance] ➔ Click [ISO-27001 Accredited] chip ➔ Click [Verify Credential in Zero-Knowledge ➔]
-       │
-       ▼
-Move to top navbar ➔ Click [Awarded] ➔ Point to winning price ($168,000) ➔ Point to "Losing Bids Remain Sealed Forever"
-       │
-       ▼
-Scroll to Footer ➔ Hover GitHub link ➔ Hover Preprod Explorer link ➔ Stop recording! 🏁
-```
+> **Verified Against Frontend Codebase**: Every single button, chip, tab, and input in this guide matches the exact labels and layout rendered in the application.  
+> **Format**: Pure arrow-by-arrow (`➔`) physical actions. No narration / speech text. Covers all 5 Midnight Compact Zero-Knowledge circuits.
 
 ---
 
-## 🎬 Step-by-Step Mouse Action Guide
+## 🧭 Master Action Flowchart
 
-### STEP 1: Homepage & Hero Banner
-`Open browser at http://localhost:5173/ (or https://bid-shield-frontend.vercel.app/) ➔ Move mouse to center over BidShield Hero banner ➔ Hover cursor over BidShield logo and "Compare Bids Without Exposing the Bids"`
+```
+Open http://localhost:5173/ (or https://bid-shield-frontend.vercel.app/)
+       │
+       ▼
+[Top-Right Navbar] Click [🌐 PREVIEW ▼] or [🌐 PREPROD ▼] ➔ Click [Preprod Testnet]
+       │
+       ▼
+[Top-Right Navbar] Click [Connect Wallet] (mint green) ➔ Click [Instant Demo Sandbox] (or 1AM Approve)
+       │
+       ▼
+[Center Navbar] Click [Circuit Docs]
+       │
+       ├─➔ [Left List] Click [1. initializeProcurement] ➔ [Right Panel] View Public Inputs & Compact Code
+       ├─➔ [Left List] Click [2. submitSealedBid] ➔ [Right Panel] View Private Witnesses ➔ Click [Copy Code]
+       ├─➔ [Left List] Click [3. verifyCompliance] ➔ [Right Panel] View Accreditation Hash Check
+       ├─➔ [Left List] Click [4. closeBidding] ➔ [Right Panel] View Deadline Guard Assertion
+       └─➔ [Left List] Click [5. awardProcurement] ➔ [Right Panel] View Selective Disclosure Invariant
+       │
+       ▼
+[Circuit Docs Header] Click [← Back to Tenders]
+       │
+       ▼
+[Top-Right Navbar] Click [✨ Publish RFP] (black/primary button)
+       │
+       ▼
+[Modal] Click [Fill RFP Template] chip ➔ Click [Publish RFP Tender] (yellow button)
+       │
+       ▼
+[First Tender Card] Click [Submit Sealed Bid] (yellow button)
+       │
+       ▼
+[Modal] Click [75% Ceiling] chip (or type amount) ➔ Click [New Entropy] chip ➔ Point to [On-Chain Commitment Hash] ➔ Click [Seal & Submit Bid]
+       │
+       ▼
+[Tender Card] Click [Prove ZK] (white button with shield icon)
+       │
+       ▼
+[Modal] Click [Use Matching Standard Token] chip ➔ Click [Verify in Zero-Knowledge] (mint button) ➔ Click [Close]
+       │
+       ▼
+[Center Navbar] Click [Awarded] ➔ Point cursor to [Awarded Winning Contract] box & "🔒 Competitor bids remain sealed forever"
+       │
+       ▼
+Scroll to Bottom Footer ➔ Hover [GitHub] ➔ Hover [@BidShieldApp] ➔ Hover [View Live Audit Sheet] ➔ Finish! 🏁
+```
+
+---
+
+## 🎬 Exact Mouse & Click Sequence (Step-by-Step)
+
+### STEP 1: Homepage & Top Hero
+`Open browser at http://localhost:5173/ (or https://bid-shield-frontend.vercel.app/)`  
+`➔ Move mouse to center of page over Hero Section`  
+`➔ Hover cursor over BidShield logo and title "Compare Bids Without Exposing the Bids"`  
 
 ---
 
 ### STEP 2: Switch Network to Preprod
-`Move mouse to top right corner of navbar ➔ Click [🌐 Network ▼] dropdown ➔ Click [Preprod Testnet] ➔ Move mouse down to telemetry strip ➔ Point cursor at block height (#2,690,000+) and contract address [fc67e285...]`
+`Move mouse to top-right corner of the navbar`  
+`➔ Click [🌐 PREVIEW ▼] (or [🌐 PREPROD ▼]) network switcher button`  
+`➔ Dropdown menu opens showing "Select Network"`  
+`➔ Click [Preprod Testnet] button`  
+`➔ Move mouse down to the live telemetry strip below the hero`  
+`➔ Point cursor at "Block Height #2,69..." and Contract "fc67e285..."`  
 
 ---
 
-### STEP 3: Connect 1AM Wallet
-`Move mouse to top right corner ➔ Click [Connect Wallet] (mint green button) ➔ 1AM Wallet popup appears ➔ Click [Approve / 1AM Wallet] ➔ Move mouse back to top right ➔ Point cursor at connected green badge [mn_addr_preprod1... 🟢]`
+### STEP 3: Connect Midnight Wallet
+`Move mouse to top-right corner of the navbar`  
+`➔ Click [Connect Wallet] (mint green button)`  
+`➔ If 1AM Wallet popup appears ➔ Click [Approve]`  
+`➔ (If "Midnight DApp Connector" modal appears on screen instead ➔ Click [Instant Demo Sandbox] mint green card)`  
+`➔ Move mouse to top-right navbar ➔ Notice button now shows connected address badge: [mn_addr_preprod1... 🟢]`  
 
 ---
 
 ### STEP 4: Inspect ALL 5 Zero-Knowledge Circuits
-`Move mouse to top navbar ➔ Click [Circuit Docs] tab`
-`➔ Page switches to Circuit Documentation Section`
-`➔ Move mouse to left sidebar ➔ Click [1. initializeProcurement] ➔ Move mouse right to show Compact code & public inputs`
-`➔ Move mouse to left sidebar ➔ Click [2. submitSealedBid] ➔ Move mouse right ➔ Point cursor at private witnesses: "bidAmount, salt" ➔ Click [Copy Code] button (turns green with checkmark)`
-`➔ Move mouse to left sidebar ➔ Click [3. verifyCompliance] ➔ Move mouse right ➔ Point cursor at "Persistent hash accreditation proof"`
-`➔ Move mouse to left sidebar ➔ Click [4. closeBidding] ➔ Move mouse right ➔ Point cursor at "Deadline enforcement invariant"`
-`➔ Move mouse to left sidebar ➔ Click [5. awardProcurement] ➔ Move mouse right ➔ Point cursor at "Selective disclosure & winning supplier reveal"`
-`➔ Move mouse back to top navbar ➔ Click [Tenders] tab to return to active tenders`
+`Move mouse to center navbar`  
+`➔ Click [Circuit Docs] button (has book icon)`  
+`➔ View opens the "Zero-Knowledge Circuit Documentation" section`  
+
+* **Circuit 1:**  
+  `Move mouse to left sidebar ➔ Click [1. initializeProcurement]`  
+  `➔ Move mouse to right panel ➔ Hover over "Public Inputs (On-Chain Consensus)" and Compact code`  
+
+* **Circuit 2:**  
+  `Move mouse to left sidebar ➔ Click [2. submitSealedBid]`  
+  `➔ Move mouse to right panel ➔ Point cursor at red text under "Private Witnesses (Client Local RAM Only)": "witness getBidAmount(): Uint<64>"`  
+  `➔ Move mouse to code header ➔ Click [Copy Code] button (turns into green "Copied!" with checkmark)`  
+
+* **Circuit 3:**  
+  `Move mouse to left sidebar ➔ Click [3. verifyCompliance]`  
+  `➔ Move mouse to right panel ➔ Point cursor at "expectedAccreditationHash" and "persistentHash(credentialSecret)"`  
+
+* **Circuit 4:**  
+  `Move mouse to left sidebar ➔ Click [4. closeBidding]`  
+  `➔ Move mouse to right panel ➔ Point cursor at "assert(currentTimestamp >= submissionDeadline)"`  
+
+* **Circuit 5:**  
+  `Move mouse to left sidebar ➔ Click [5. awardProcurement]`  
+  `➔ Move mouse to right panel ➔ Point cursor at "Privacy & Zero-Knowledge Guarantee: Selectively discloses ONLY the winning supplier and price"`  
+
+`➔ Move mouse up to top banner ➔ Click [← Back to Tenders] button`  
+`➔ Screen returns to the active Procurement Vault RFP grid`  
 
 ---
 
-### STEP 5: Publish a Procurement RFP (Buyer Flow)
-`Move mouse to top right navbar ➔ Click [✨ Publish RFP] button`
-`➔ Publish modal opens on screen`
-`➔ Move mouse to [Tender Title] box ➔ Click ➔ Type: "Enterprise Cloud Security & ZK Auditing"`
-`➔ Move mouse to [Issuing Organization] box ➔ Click ➔ Type: "Midnight Web3 Consortium"`
-`➔ Move mouse to [Ceiling Budget ($)] box ➔ Click ➔ Type: "500000"`
-`➔ Move mouse to [Submission Window (Days)] box ➔ Click ➔ Type: "7"`
-`➔ Move mouse to bottom of modal ➔ Click [Publish Procurement RFP ➔] (yellow button)`
-`➔ Modal closes ➔ Green toast appears: "Procurement RFP Published!" ➔ Point cursor at newly created tender card at top of grid`
+### STEP 5: Publish Procurement RFP (Buyer Flow)
+`Move mouse to top-right navbar`  
+`➔ Click [✨ Publish RFP] button`  
+`➔ "Publish Procurement RFP" modal opens on screen`  
+`➔ Move mouse down to the chip button ➔ Click [Fill RFP Template] chip`  
+`➔ (Notice Title, Organization, Budget "500000", Window "7", and Standard auto-fill immediately!)`  
+`➔ Move mouse to bottom-right of modal ➔ Click [Publish RFP Tender] (yellow button)`  
+`➔ Modal closes ➔ Green toast pops up in top-right: "Procurement RFP Published!"`  
+`➔ Point cursor at the newly added tender card at top of grid`  
 
 ---
 
 ### STEP 6: Submit Confidential Sealed Bid (Supplier Flow)
-`Move mouse to the first tender card in grid ➔ Click [🔒 Submit Sealed Bid] button`
-`➔ Submit Bid modal opens`
-`➔ Move mouse to [Bid Amount ($)] box ➔ Click ➔ Type: "420000"`
-`➔ Move mouse to salt field ➔ Click [↻] (Regenerate Salt icon) twice`
-`➔ Move mouse down to [Real-Time Cryptographic Commitment Preview] ➔ Point cursor at 32-byte SHA-256 hash commitment`
-`➔ Move mouse to bottom of modal ➔ Click [Submit Sealed Bid to Midnight ➔] (yellow button)`
-`➔ Modal closes ➔ Green toast appears: "Confidential Sealed Bid Submitted!" ➔ Point cursor at tender card showing bid count incremented`
+`Move mouse to the first open tender card in the grid`  
+`➔ Click [Submit Sealed Bid] (yellow button with lock icon)`  
+`➔ "Submit Confidential Sealed Bid" modal opens`  
+`➔ Move mouse to "Quick presets:" ➔ Click [75% Ceiling ($...)] chip (or click input and type: "420000")`  
+`➔ Move mouse to the right of "Cryptographic Salt Entropy" ➔ Click [New Entropy] chip button (salt refreshes)`  
+`➔ Move mouse down to "On-Chain Commitment Hash (Public)" ➔ Point cursor at the real-time generated 32-byte hash (0x...)`  
+`➔ Move mouse to bottom-right of modal ➔ Click [Seal & Submit Bid] (yellow button with lock icon)`  
+`➔ Modal closes ➔ Green toast appears: "Confidential Sealed Bid Submitted!"`  
+`➔ Point cursor at the tender card showing "Sealed Bids: ... Received"`  
 
 ---
 
 ### STEP 7: Prove Compliance in Zero-Knowledge
-`Move mouse to tender card ➔ Click [✓ Verify Compliance] button`
-`➔ Compliance modal opens`
-`➔ Move mouse to quick chips ➔ Click [ISO-27001 Accredited] chip`
-`➔ Move mouse to bottom of modal ➔ Click [Verify Credential in Zero-Knowledge ➔] (yellow button)`
-`➔ Modal closes ➔ Green toast appears: "Accreditation Verified in ZK!" ➔ Point cursor at green verified badge on card`
+`Move mouse to the same tender card`  
+`➔ Click [Prove ZK] (white button with shield icon at top-right of card actions)`  
+`➔ "Prove Accreditation in ZK" modal opens`  
+`➔ Move mouse to "Helper:" ➔ Click [Use Matching Standard Token] chip`  
+`➔ (Notice "Private Supplier Accreditation Key *" auto-fills with matching standard)`  
+`➔ Move mouse to bottom-right of modal ➔ Click [Verify in Zero-Knowledge] (mint green button with key icon)`  
+`➔ Green verification banner appears inside modal: "ZK Compliance Verified! Mathematical proof valid!"`  
+`➔ Move mouse to bottom-left of modal ➔ Click [Close] button`  
+`➔ Modal closes`  
 
 ---
 
 ### STEP 8: View Awarded Tender & Selective Disclosure
-`Move mouse to top navbar ➔ Click [Awarded] tab`
-`➔ Page scrolls down to Awarded Tender Section`
-`➔ Point cursor at winning supplier address badge`
-`➔ Point cursor at winning settled price ($168,000)`
-`➔ Point cursor at red badge: "Losing Bids Remain Sealed Forever"`
+`Move mouse to center navbar`  
+`➔ Click [Awarded] filter button`  
+`➔ Page scrolls down to the Awarded tender cards`  
+`➔ Move mouse to the mint-green box: "Awarded Winning Contract"`  
+`➔ Point cursor at the winning settled price (e.g. "$168,000")`  
+`➔ Point cursor at the winning supplier address ("Supplier: mn_addr_...")`  
+`➔ Point cursor at the bottom label: "🔒 Competitor bids remain sealed forever"`  
 
 ---
 
-### STEP 9: Footer Links & Verification
-`Scroll page down to bottom footer`
-`➔ Move mouse to [GitHub Repository] link ➔ Hover`
-`➔ Move mouse to [Preprod Contract Explorer] link ➔ Hover`
-`➔ Move mouse to [Live Community Feedback Sheet] link ➔ Hover`
-`➔ Stop recording! 🎬`
+### STEP 9: Footer Links & Project Verification
+`Scroll page down to the bottom footer`  
+`➔ Move mouse to [GitHub] button ➔ Hover cursor`  
+`➔ Move mouse to [@BidShieldApp] button (blue Twitter button) ➔ Hover cursor`  
+`➔ Move mouse to [Open Feedback Form] (mint button) ➔ Hover cursor`  
+`➔ Move mouse to [View Live Audit Sheet] (underlined link) ➔ Hover cursor`  
+`➔ Move mouse to "Network Specs" box showing Contract "fc67e285..." ➔ Hover cursor`  
+`➔ Stop recording! 🎬`  

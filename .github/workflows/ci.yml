@@ -25,8 +25,8 @@ jobs:
           node-version: 22.x
           cache: npm
 
-      - name: Install Contract Dependencies
-        run: npm install --prefix contract
+      - name: Install Dependencies
+        run: npm install
 
       - name: Run Vitest Contract & Privacy Invariant Tests (12/12)
         run: npm test --prefix contract
@@ -56,11 +56,11 @@ jobs:
           node-version: 22.x
           cache: npm
 
-      - name: Install Frontend Dependencies
-        run: npm install --prefix frontend
+      - name: Install Dependencies
+        run: npm install
 
       - name: Strict TypeScript Compilation Check
-        run: npx tsc --noEmit --prefix frontend
+        run: npx tsc -p frontend/tsconfig.json --noEmit
 
       - name: Build Production Frontend Distribution (Vite)
         run: npm run build --prefix frontend

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Globe, LogOut, ChevronDown, Check } from 'lucide-react';
+import { Sparkles, Globe, LogOut, ChevronDown, Check, Rocket } from 'lucide-react';
 import type { WalletAccount, MidnightNetwork } from '../types/index.js';
 import { formatAddress } from '../utils/crypto.js';
 
@@ -9,6 +9,7 @@ interface FloatingNavbarProps {
   onConnectClick: () => void;
   onDisconnectClick: () => void;
   onCreateRfpClick: () => void;
+  onDeployClick?: () => void;
   onSwitchNetwork: (network: MidnightNetwork) => void;
   activeFilter: string;
   setActiveFilter: (filter: string) => void;
@@ -20,6 +21,7 @@ export const FloatingNavbar: React.FC<FloatingNavbarProps> = ({
   onConnectClick,
   onDisconnectClick,
   onCreateRfpClick,
+  onDeployClick,
   onSwitchNetwork,
   activeFilter,
   setActiveFilter,
@@ -138,6 +140,26 @@ export const FloatingNavbar: React.FC<FloatingNavbarProps> = ({
               </div>
             )}
           </div>
+
+          {/* Deploy Contract CTA */}
+          {onDeployClick && (
+            <button
+              className="neo-btn neo-btn-sm"
+              onClick={onDeployClick}
+              style={{
+                padding: '0.6rem 0.9rem',
+                background: 'var(--accent-coral)',
+                color: '#fff',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+              }}
+              title="Deploy BidShield contract to current network"
+            >
+              <Rocket size={15} />
+              <span>Deploy</span>
+            </button>
+          )}
 
           {/* Publish RFP CTA (Desktop) */}
           <button

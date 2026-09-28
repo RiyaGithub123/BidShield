@@ -7,6 +7,7 @@ This document tracks user feedback gathered during the testing cohorts (Preview 
 ## Feedback Collection Channels
 
 - **Public Google Feedback Form**: [https://forms.gle/bidshield-feedback](https://forms.gle/bidshield-feedback)
+- **Exported Raw Customer Reviews Dataset**: [`FEEDBACK.csv`](FEEDBACK.csv) (Structured CSV with timestamps, ratings, positive/negative reviews, and commit resolutions)
 - **Ecosystem Testing Cohorts**: Discord `#midnight-builders` & Testnet community
 - **Total Responses Analyzed**: 28 structured surveys & interviews
 

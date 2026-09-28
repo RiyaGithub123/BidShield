@@ -11,6 +11,7 @@ import { CreateProcurementModal } from './components/CreateProcurementModal.js';
 import { ComplianceModal } from './components/ComplianceModal.js';
 import { AwardModal } from './components/AwardModal.js';
 import { MobileWalletModal } from './components/MobileWalletModal.js';
+import { DeployContractModal } from './components/DeployContractModal.js';
 import { Footer } from './components/Footer.js';
 import { useMidnightWallet } from './hooks/useMidnightWallet.js';
 import { bidShieldService } from './contracts/contractService.js';
@@ -25,6 +26,7 @@ export const App: React.FC = () => {
     connectDemo,
     disconnect,
     switchNetwork,
+    connectorInstance,
   } = useMidnightWallet();
 
   const [tenders, setTenders] = useState<ProcurementTender[]>(bidShieldService.getTenders());
@@ -33,6 +35,7 @@ export const App: React.FC = () => {
   // Modal visibility states
   const [selectedBidTender, setSelectedBidTender] = useState<ProcurementTender | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState<boolean>(false);
+  const [isDeployOpen, setIsDeployOpen] = useState<boolean>(false);
   const [complianceTender, setComplianceTender] = useState<ProcurementTender | null>(null);
   const [awardTender, setAwardTender] = useState<ProcurementTender | null>(null);
   const [isMobileWalletOpen, setIsMobileWalletOpen] = useState<boolean>(false);
@@ -179,6 +182,7 @@ export const App: React.FC = () => {
         onConnectClick={handleConnectClick}
         onDisconnectClick={disconnect}
         onCreateRfpClick={() => setIsCreateOpen(true)}
+        onDeployClick={() => setIsDeployOpen(true)}
         onSwitchNetwork={handleNetworkSwitch}
         activeFilter={activeFilter}
         setActiveFilter={setActiveFilter}
@@ -343,6 +347,22 @@ export const App: React.FC = () => {
         onClose={() => setIsMobileWalletOpen(false)}
         onConnectAttempt={connect}
         onConnectDemo={connectDemo}
+      />
+
+      <DeployContractModal
+        isOpen={isDeployOpen}
+        onClose={() => setIsDeployOpen(false)}
+        network={network}
+        wallet={wallet}
+        connectorInstance={connectorInstance}
+        onDeploymentSuccess={(net, contractAddr, txId) => {
+          addNotification(
+            'success',
+            'Contract Deployed On-Chain!',
+            `BidShield contract deployed to Midnight ${net.toUpperCase()}: ${contractAddr.slice(0, 16)}...`,
+            txId
+          );
+        }}
       />
 
       {/* Neo-Brutalist Toast Notifications */}

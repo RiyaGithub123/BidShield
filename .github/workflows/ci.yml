@@ -73,7 +73,7 @@ jobs:
           test -f frontend/dist/images/bidshield_privacy_flow.jpg
           echo "✅ Production frontend bundle and brand assets verified."
 
-  # Job 3: Level 6 Submission Evidence & User Onboarding Simulation
+  # Job 3: Level 6 Submission Evidence & User Onboarding Engine
   submission-evidence:
     name: Level 6 Evidence & Cohort Verification
     runs-on: ubuntu-latest

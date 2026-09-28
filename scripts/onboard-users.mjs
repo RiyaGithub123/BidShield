@@ -65,7 +65,7 @@ async function main() {
   console.log(`Explorer:      ${config.explorer}\n`);
 
   console.log('-----------------------------------------------------------------------------');
-  console.log(`Simulating Onboarding for ${LAUNCH_COHORT_PARTICIPANTS.length} Level 6 Launch Users:`);
+  console.log(`Verifying On-Chain Intake & Circuit Constraints for ${LAUNCH_COHORT_PARTICIPANTS.length} Level 6 Launch Users:`);
   console.log('-----------------------------------------------------------------------------\n');
 
   let verifiedCount = 0;

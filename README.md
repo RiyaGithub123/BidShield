@@ -61,10 +61,10 @@ BidShield is deployed and verified across both **Preview** and **Preprod** Midni
 | Parameter | Preview Testnet (Primary) | Preprod Testnet (Secondary) |
 |:---|:---|:---|
 | **Network Target** | `preview` | `preprod` |
-| **Contract Address** | `0x4f8a29b1e7c54a9382103746e5b29104c8f12a57e3d9281a4b6c891e2049d5a1` | `0x8f2d93b1e7c54a9382103746e5b29104c8f12a57e3d9281a4b6c891e2049d5a1` |
+| **Contract Address** | `0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123` | `fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b` |
 | **Substrate RPC Node** | `https://rpc.preview.midnight.network` | `https://rpc.preprod.midnight.network` |
 | **GraphQL Indexer** | `https://indexer.preview.midnight.network/api/v4/graphql` | `https://indexer.preprod.midnight.network/api/v4/graphql` |
-| **Explorer Link** | [Midnight Preview Explorer](https://midnightexplorer.com) | [Midnight Preprod Explorer](https://midnightexplorer.com) |
+| **Explorer Link** | [Midnight Preview Explorer](https://preview.midnightexplorer.com/contracts/0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123) | [Midnight Preprod Explorer](https://preprod.midnightexplorer.com/contracts/fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b) |
 | **Faucet** | [Preview Faucet](https://midnight-tmnight-preview.nethermind.dev) | [Preprod Faucet](https://midnight-tmnight-preprod.nethermind.dev) |
 | **ZK Prover Engine** | In-Browser Web Crypto & WASM | In-Browser Web Crypto & WASM |
 
@@ -119,8 +119,8 @@ BidShield smart contracts are deployed and verified across both Midnight public 
 
 | Network | Contract Address | Deployer Address | Status | Network Explorer |
 | :--- | :--- | :--- | :--- | :--- |
-| **Midnight Preprod** | `0x8f2d93b1e7c54a9382103746e5b29104c8f12a57e3d9281a4b6c891e2049d5a1` | `mn_addr_preprod1yrl238vvh3l662yypvucq4zltgfy0633a2cj9mn76us0tlnql6assr2ga7` | **LIVE & VERIFIED** | [Preprod Indexer](https://indexer.preprod.midnight.network/api/v4/graphql) |
-| **Midnight Preview** | `0x4f8a29b1e7c54a9382103746e5b29104c8f12a57e3d9281a4b6c891e2049d5a1` | `mn_addr_preview108ezrx3t5syg4g9a3y3ykavl73ftl6nnn0ntctldpegl3f5l7acssug02u` | **LIVE & VERIFIED** | [Preview Indexer](https://indexer.preview.midnight.network/api/v4/graphql) |
+| **Midnight Preprod** | `fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b` | `mn_addr_preprod170a8t0cndggvvdx0x4c69s2fddavxggrw33e40jh6406ykg7sessmcp5dm` | **LIVE & VERIFIED** | [Preprod Explorer](https://preprod.midnightexplorer.com/contracts/fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b) |
+| **Midnight Preview** | `0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123` | `mn_addr_preview170a8t0cndggvvdx0x4c69s2fddavxggrw33e40jh6406ykg7sessmely7x` | **LIVE & VERIFIED** | [Preview Explorer](https://preview.midnightexplorer.com/contracts/0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123) |
 
 ---
 

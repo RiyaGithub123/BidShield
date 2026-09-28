@@ -9,8 +9,8 @@ export const SUPPORTED_NETWORKS: Record<MidnightNetwork, NetworkConfig> = {
     indexerUrl: 'https://indexer.preview.midnight.network/api/v4/graphql',
     indexerWsUrl: 'wss://indexer.preview.midnight.network/api/v4/graphql/ws',
     faucetUrl: 'https://midnight-tmnight-preview.nethermind.dev',
-    explorerUrl: 'https://midnightexplorer.com',
-    contractAddress: import.meta.env.VITE_PREVIEW_CONTRACT_ADDRESS || '0x4f8a29b1e7c54a9382103746e5b29104c8f12a57e3d9281a4b6c891e2049d5a1',
+    explorerUrl: 'https://preview.midnightexplorer.com',
+    contractAddress: import.meta.env.VITE_PREVIEW_CONTRACT_ADDRESS || '0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123',
   },
   preprod: {
     id: 'preprod',
@@ -19,8 +19,8 @@ export const SUPPORTED_NETWORKS: Record<MidnightNetwork, NetworkConfig> = {
     indexerUrl: 'https://indexer.preprod.midnight.network/api/v4/graphql',
     indexerWsUrl: 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws',
     faucetUrl: 'https://midnight-tmnight-preprod.nethermind.dev',
-    explorerUrl: 'https://midnightexplorer.com',
-    contractAddress: import.meta.env.VITE_PREPROD_CONTRACT_ADDRESS || '0x8f2d93b1e7c54a9382103746e5b29104c8f12a57e3d9281a4b6c891e2049d5a1',
+    explorerUrl: 'https://preprod.midnightexplorer.com',
+    contractAddress: import.meta.env.VITE_PREPROD_CONTRACT_ADDRESS || 'fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b',
   },
 };
 

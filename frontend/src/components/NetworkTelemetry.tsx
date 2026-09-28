@@ -97,7 +97,7 @@ export const NetworkTelemetry: React.FC<NetworkTelemetryProps> = ({ network }) =
           </div>
 
           <a
-            href={`${config.explorerUrl}/contract/${config.contractAddress}`}
+            href={`${config.explorerUrl}/contracts/${config.contractAddress}`}
             target="_blank"
             rel="noopener noreferrer"
             className="neo-btn neo-btn-sm"

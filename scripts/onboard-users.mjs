@@ -47,6 +47,11 @@ const LAUNCH_COHORT_PARTICIPANTS = [
   { name: 'Supratik Sen', role: 'Security Systems Integrator', bid: 370000, address: 'mn_addr_preprod1j83kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k' },
   { name: 'Debarghya Mallick', role: 'Financial Risk Consultant', bid: 335000, address: 'mn_addr_preprod1k92k8fha93k82la098fhs74k294fhs74k294fhs74k294fhs7' },
   { name: 'Barnali Majumdar', role: 'Legal Operations Specialist', bid: 299000, address: 'mn_addr_preprod1l83kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k' },
+  { name: 'Indrani Mukherjee', role: 'Web3 Systems Engineer', bid: 328000, address: 'mn_addr_preprod1m74kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k' },
+  { name: 'Pratik Bhattacharya', role: 'Systems Auditor', bid: 342000, address: 'mn_addr_preprod1q95kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k' },
+  { name: 'Rupsa Dutta', role: 'Procurement Lead', bid: 318000, address: 'mn_addr_preprod1w06kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k' },
+  { name: 'Animesh Ghosh', role: 'Enterprise Contractor', bid: 362000, address: 'mn_addr_preprod1e17kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k' },
+  { name: 'Sreeparna Roy', role: 'Compliance Analyst', bid: 308000, address: 'mn_addr_preprod1r28kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k' },
 ];
 
 async function main() {

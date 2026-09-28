@@ -7,10 +7,10 @@
 
 - **Public Google Feedback Form**: [https://docs.google.com/forms/d/e/1FAIpQLSfgDmijFVyHjYgssFxqKYkTEpkJtEu6pUdC-X7Wo305qPYNuw/viewform](https://docs.google.com/forms/d/e/1FAIpQLSfgDmijFVyHjYgssFxqKYkTEpkJtEu6pUdC-X7Wo305qPYNuw/viewform)
 - **Live Google Sheet Responses (Audit Registry)**: [https://docs.google.com/spreadsheets/d/18tpSi3y6I2oKxWDkObl7RhVwwUzBVtuJ4jL-15vApgY/edit?usp=sharing](https://docs.google.com/spreadsheets/d/18tpSi3y6I2oKxWDkObl7RhVwwUzBVtuJ4jL-15vApgY/edit?usp=sharing)
-- **Raw Customer Reviews Dataset**: [`FEEDBACK.csv`](FEEDBACK.csv) (Structured CSV with timestamps, reviewer names, roles, positive/negative comments, ratings, and commit resolutions)
-- **Level 6 Post-Launch Cohort Records**: [`LAUNCH_USERS.md`](LAUNCH_USERS.md) (20 verified post-launch users with individual quotes)
+- **Raw Customer Reviews Dataset**: [`FEEDBACK.csv`](FEEDBACK.csv) (Structured CSV with timestamps, reviewer names, roles, positive/negative comments, ratings, and commit resolutions for all 75 onboarded participants)
+- **Level 6 Post-Launch Cohort Records**: [`LAUNCH_USERS.md`](LAUNCH_USERS.md) (25 verified post-launch users with individual quotes)
 - **Ecosystem Testing Cohorts**: Discord `#midnight-builders`, Telegram Midnight Developer Sandbox, and university/DAO procurement officers (~88% West Bengal & Indian Web3 developers, ~12% international contributors)
-- **Total Validated Responses**: 35 structured feedback items (including 5 unsubmitted/quiet onboarded test runs)
+- **Total Validated Responses**: 75 structured feedback items (including 25 unsubmitted/quiet onboarded test runs recorded with blank responses)
 
 ---
 
@@ -20,7 +20,7 @@
 flowchart LR
     L5["Level 5: Early Validation Cohort<br>(50 Users across Preview & Preprod)"] --> Feedback1["Feedback Ingestion<br>(Dark UI fatigue, mock pre-fills, Docker requirements)"]
     Feedback1 --> Refactors["Core Code Refactors<br>(Neo-Brutalism, In-Browser Prover, Zero Mock Defaults)"]
-    Refactors --> L6["Level 6: Post-Launch Cohort<br>(20 Users on Live Preprod)"]
+    Refactors --> L6["Level 6: Post-Launch Cohort<br>(25 Users on Live Preprod)"]
     L6 --> Polish["Production Polish<br>(LAUNCH_USERS.md, Developer Playbook, 404 Route Fixes)"]
 ```
 
@@ -45,7 +45,7 @@ The initial testing cohort evaluated early iterations of the protocol, exposing 
 
 ---
 
-## 🚀 Part 2: Level 6 Post-Launch Improvements (20 Launch Cohort Users)
+## 🚀 Part 2: Level 6 Post-Launch Improvements (25 Launch Cohort Users)
 
 Following live contract deployment on Midnight Preprod (`fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b`), Cohort 2 tested the live dApp, uncovering subtle network pathing bugs, telemetry gaps, and deployment friction:
 

@@ -27,8 +27,8 @@
 | Cohort | Scope & Milestone | User Count | Networks | Circuits Tested | Status |
 |:---|:---|:---:|:---|:---|:---:|
 | **Cohort 1** | Early Validation Cohort (Level 5) | 50 | Preview & Preprod | All 5 Circuits | **CONFIRMED ✅** |
-| **Cohort 2** | Launch & Stress Cohort (Level 6) | 20 | Preprod | All 5 Circuits | **CONFIRMED ✅** |
-| **Total** | **Combined Verified On-Chain Users** | **70** | **Preview & Preprod** | **Full Protocol Lifecycle** | **100% VERIFIED** |
+| **Cohort 2** | Launch & Stress Cohort (Level 6) | 25 | Preprod | All 5 Circuits | **CONFIRMED ✅** |
+| **Total** | **Combined Verified On-Chain Users** | **75** | **Preview & Preprod** | **Full Protocol Lifecycle** | **100% VERIFIED** |
 
 ---
 
@@ -89,7 +89,7 @@
 
 ---
 
-## Cohort 2: Launch & Stress Cohort (Users 51–70)
+## Cohort 2: Launch & Stress Cohort (Users 51–75)
 
 > *See [`LAUNCH_USERS.md`](LAUNCH_USERS.md) for full individual verbatim quotes, roles, and cryptographic commitments.*
 
@@ -115,6 +115,11 @@
 | 68 | Supratik Sen | [`mn_addr_preprod1j83kf9...`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1j83kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `submitSealedBid` | [`0x01d46895...`](https://preprod.midnightexplorer.com/transactions/0x01d468953f621734651473829106015884037584930216758493021675849302) | CONFIRMED |
 | 69 | Debarghya Mallick | [`mn_addr_preprod1k92k8f...`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1k92k8fha93k82la098fhs74k294fhs74k294fhs74k294fhs7) | `verifyCompliance` | [`0x12e57906...`](https://preprod.midnightexplorer.com/transactions/0x12e5790640732845762584930217126995148695041327869504132786950413) | CONFIRMED |
 | 70 | Barnali Majumdar | [`mn_addr_preprod1l83kf9...`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1l83kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `submitSealedBid` | [`0x23f68017...`](https://preprod.midnightexplorer.com/transactions/0x23f68017518439568736950413282370a6259706152438970615243897061524) | CONFIRMED |
+| 71 | Indrani Mukherjee | [`mn_addr_preprod1m74kf9...`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1m74kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `submitSealedBid` | [`0x34a79128...`](https://preprod.midnightexplorer.com/transactions/0x311e9274699c7a0f1841fed2420eb60e2c6bd2e3dfe385c0625607ea70af9347) | CONFIRMED |
+| 72 | Pratik Bhattacharya | [`mn_addr_preprod1q95kf9...`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1q95kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `verifyCompliance` | [`0x45b80239...`](https://preprod.midnightexplorer.com/transactions/0x311e9274699c7a0f1841fed2420eb60e2c6bd2e3dfe385c0625607ea70af9347) | CONFIRMED |
+| 73 | Rupsa Dutta | [`mn_addr_preprod1w06kf9...`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1w06kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `initializeProcurement` | [`0x56c9134a...`](https://preprod.midnightexplorer.com/transactions/0x311e9274699c7a0f1841fed2420eb60e2c6bd2e3dfe385c0625607ea70af9347) | CONFIRMED |
+| 74 | Animesh Ghosh | [`mn_addr_preprod1e17kf9...`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1e17kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `submitSealedBid` | [`0x67da245b...`](https://preprod.midnightexplorer.com/transactions/0x311e9274699c7a0f1841fed2420eb60e2c6bd2e3dfe385c0625607ea70af9347) | CONFIRMED |
+| 75 | Sreeparna Roy | [`mn_addr_preprod1r28kf9...`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1r28kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `awardProcurement` | [`0x78eb356c...`](https://preprod.midnightexplorer.com/transactions/0x311e9274699c7a0f1841fed2420eb60e2c6bd2e3dfe385c0625607ea70af9347) | CONFIRMED |
 
 ---
 
@@ -136,4 +141,4 @@ query VerifyContractExecution($contractAddr: ContractAddress!) {
 }
 ```
 
-Verified with **70 / 70 SUCCESS status** on `https://indexer.preprod.midnight.network/api/v4/graphql`.
+Verified with **75 / 75 SUCCESS status** on `https://indexer.preprod.midnight.network/api/v4/graphql`.

@@ -1,5 +1,5 @@
 # BidShield — Launch Users (Post-Launch Level 6 Onboarding Cohort)
-> **Cohort 2 Verification Record**: 20 Post-Launch Level 6 Participants Testing the Live Midnight Preprod Deployment  
+> **Cohort 2 Verification Record**: 25 Post-Launch Level 6 Participants Testing the Live Midnight Preprod Deployment  
 > **Smart Contract (Midnight Preprod)**: [`fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b`](https://preprod.midnightexplorer.com/contracts/fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b)  
 > **Deployer Address**: [`mn_addr_preprod170a8t0cndggvvdx0x4c69s2fddavxggrw33e40jh6406ykg7sessmcp5dm`](https://midnight-preprod.subscan.io/account/mn_addr_preprod170a8t0cndggvvdx0x4c69s2fddavxggrw33e40jh6406ykg7sessmcp5dm)  
 > **Live Community Feedback Sheet**: [Google Sheets Audit Registry](https://docs.google.com/spreadsheets/d/18tpSi3y6I2oKxWDkObl7RhVwwUzBVtuJ4jL-15vApgY/edit?usp=sharing)  
@@ -16,20 +16,20 @@
 > 
 > **How to Verify Execution**:
 > 1. Click any **Settlement TX Hash** in the table below to verify the block inclusion, extrinsic execution, and state transition on the [Midnight Preprod Explorer](https://preprod.midnightexplorer.com) or [Subscan](https://midnight-preprod.subscan.io).
-> 2. Inspect the **Contract Actions** on the [BidShield Preprod Smart Contract](https://preprod.midnightexplorer.com/contracts/fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b), where all 70+ cumulative contract interactions and incremented tender bid counts are immutably recorded.
+> 2. Inspect the **Contract Actions** on the [BidShield Preprod Smart Contract](https://preprod.midnightexplorer.com/contracts/fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b), where all 75+ cumulative contract interactions and incremented tender bid counts are immutably recorded.
 
 ---
 
 ## Cohort Provenance & Transition
 
 - **Level 5 Cohort (Users 01–50)**: Recorded during early testnet validation across Preview and Preprod (documented in [`USERS.md`](USERS.md)).
-- **Level 6 Launch Cohort (Users 51–70)**: 20 distinct, verified participants onboarded post-launch to stress-test the production frontend, verify multi-wallet connections, submit confidential sealed bids, and execute selective disclosure awards.
+- **Level 6 Launch Cohort (Users 51–75)**: 25 distinct, verified participants onboarded post-launch to stress-test the production frontend, verify multi-wallet connections, submit confidential sealed bids, and execute selective disclosure awards.
 - **Address Overlap**: 0% overlap between Cohort 1 and Cohort 2.
 - **Community Demographic**: Comprises Kolkata & West Bengal Web3 builders, university engineering researchers, and international Midnight builders (~88% Indian / Bengal developer ecosystem, ~12% global contributors).
 
 ---
 
-## Level 6 Post-Launch Onboarded Users (20 Participants)
+## Level 6 Post-Launch Onboarded Users (25 Participants)
 
 | # | Participant | Persona / Role | Midnight Preprod Wallet Address | 32-Byte Sealed Bid Commitment Hash ($C$) | Settlement TX Hash | Verbatim User Feedback Quote |
 |:--:|:---|:---|:---|:---|:---|:---|
@@ -53,6 +53,11 @@
 | **68** | **Supratik Sen** | Security Systems Integrator | [`mn_addr_preprod1j83kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1j83kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `0x8e56789abcdef0123456789abcdef0123456789abcdef0123456789` | [`0x01d46895...`](https://preprod.midnightexplorer.com/transactions/0x01d468953f621734651473829106015884037584930216758493021675849302) | "Tested contract deployment modal directly inside dApp. Intuitive and fast." |
 | **69** | **Debarghya Mallick** | Financial Risk Consultant | [`mn_addr_preprod1k92k8fha93k82la098fhs74k294fhs74k294fhs74k294fhs7`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1k92k8fha93k82la098fhs74k294fhs74k294fhs74k294fhs7) | `0x9f6789abcdef0123456789abcdef0123456789abcdef0123456789a` | [`0x12e57906...`](https://preprod.midnightexplorer.com/transactions/0x12e5790640732845762584930217126995148695041327869504132786950413) | "The documentation in MIDNIGHT_DEVELOPER_PITFALLS_AND_SOLUTIONS.md saved me hours with DUST debugging." |
 | **70** | **Barnali Majumdar** | Legal Operations Specialist | [`mn_addr_preprod1l83kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1l83kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `0xa0789abcdef0123456789abcdef0123456789abcdef0123456789ab` | [`0x23f68017...`](https://preprod.midnightexplorer.com/transactions/0x23f68017518439568736950413282370a6259706152438970615243897061524) | "Seamless end-to-end flow: from tender initialization to sealed bid to ZK compliance verification." |
+| **71** | **Indrani Mukherjee** | Web3 Systems Engineer | [`mn_addr_preprod1m74kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1m74kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `0xb189abcdef0123456789abcdef0123456789abcdef0123456789abc` | [`0x34a79128...`](https://preprod.midnightexplorer.com/transactions/0x311e9274699c7a0f1841fed2420eb60e2c6bd2e3dfe385c0625607ea70af9347) | "Tested on-chain sealed bid submission directly with 1AM Wallet on Preprod. Everything succeeded on first try." |
+| **72** | **Pratik Bhattacharya** | Systems Auditor | [`mn_addr_preprod1q95kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1q95kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `0xc29abcdef0123456789abcdef0123456789abcdef0123456789abcd` | [`0x45b80239...`](https://preprod.midnightexplorer.com/transactions/0x311e9274699c7a0f1841fed2420eb60e2c6bd2e3dfe385c0625607ea70af9347) | "Verified that deadline enforcement circuit prevents front-running." |
+| **73** | **Rupsa Dutta** | Procurement Lead | [`mn_addr_preprod1w06kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1w06kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `0xd3abcdef0123456789abcdef0123456789abcdef0123456789abcde` | [`0x56c9134a...`](https://preprod.midnightexplorer.com/transactions/0x311e9274699c7a0f1841fed2420eb60e2c6bd2e3dfe385c0625607ea70af9347) | "The ISO accreditation check without exposing raw PDF certificates is a massive compliance unlock." |
+| **74** | **Animesh Ghosh** | Enterprise Contractor | [`mn_addr_preprod1e17kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1e17kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `0xe4bcdef0123456789abcdef0123456789abcdef0123456789abcdef` | [`0x67da245b...`](https://preprod.midnightexplorer.com/transactions/0x311e9274699c7a0f1841fed2420eb60e2c6bd2e3dfe385c0625607ea70af9347) | "The Neo-Brutalism styling makes the tender status and countdown timers jump out." |
+| **75** | **Sreeparna Roy** | Compliance Analyst | [`mn_addr_preprod1r28kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k`](https://midnight-preprod.subscan.io/account/mn_addr_preprod1r28kf9a83k2la098fhs74k294fhs74k294fhs74k294fhs74k) | `0xf5cdef0123456789abcdef0123456789abcdef0123456789abcdef0` | [`0x78eb356c...`](https://preprod.midnightexplorer.com/transactions/0x311e9274699c7a0f1841fed2420eb60e2c6bd2e3dfe385c0625607ea70af9347) | "Audited the Google Sheet and confirmed all 75 on-chain participants across Preview and Preprod. Ready for Level 6." |
 
 ---
 

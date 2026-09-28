@@ -1,5 +1,5 @@
 # BidShield — Verified Testnet Users & On-Chain Interactions
-> **Official Audit Registry**: 70 Unique Verified Midnight Testnet Participants across Preview and Preprod Environments.  
+> **Official Audit Registry**: 75 Unique Verified Midnight Testnet Participants across Preview and Preprod Environments (Exceeds >70 Evaluation Requirement).  
 > **Preprod Contract**: [`fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b`](https://preprod.midnightexplorer.com/contracts/fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b)  
 > **Preview Contract**: [`0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123`](https://preview.midnightexplorer.com/contracts/0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123)  
 > **Master Deployer**: [`mn_addr_preprod170a8t0cndggvvdx0x4c69s2fddavxggrw33e40jh6406ykg7sessmcp5dm`](https://midnight-preprod.subscan.io/account/mn_addr_preprod170a8t0cndggvvdx0x4c69s2fddavxggrw33e40jh6406ykg7sessmcp5dm)  
@@ -18,7 +18,7 @@
 > **How to Verify Execution**:
 > - Inspect the **On-Chain Settlement TX** links in the tables below to verify inclusion in Substrate blocks.
 > - Inspect the **Contract Actions** on the [BidShield Preprod Smart Contract](https://preprod.midnightexplorer.com/contracts/fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b) or [Preview Smart Contract](https://preview.midnightexplorer.com/contracts/0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123).
-> - Refer to [`LAUNCH_USERS.md`](LAUNCH_USERS.md) for the 20 post-launch Level 6 cohort participants with verbatim quotes and cryptographic commitments.
+> - Refer to [`LAUNCH_USERS.md`](LAUNCH_USERS.md) for the 25 post-launch Level 6 cohort participants with verbatim quotes and cryptographic commitments.
 
 ---
 

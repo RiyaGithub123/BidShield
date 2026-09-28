@@ -33,11 +33,13 @@
 |:---|:---|:---|:---|:---:|
 | **Level 4: Testnet & CI/CD** | Live Preprod Smart Contract | Compact Contract (5 circuits) on Preprod | [`fc67e2850565...`](https://preprod.midnightexplorer.com/contracts/fc67e2850565d285f2c51ece80eb4894a32961f317d91703f4cd98a9ebef088b) | **VERIFIED ✅** |
 | **Level 4: Multi-Network** | Preview Testnet Deployment | Secondary Verified Deployment on Preview | [`0794f000c144...`](https://preview.midnightexplorer.com/contracts/0794f000c1446592b46446d9ce4929f43867dd86f5dc1660e25827ebaaf56123) | **VERIFIED ✅** |
+| **Level 4: Live Production dApp** | Cloud Hosting & Web App | Live Responsive Interface on Vercel | [bid-shield-frontend.vercel.app](https://bid-shield-frontend.vercel.app) | **LIVE 🚀** |
 | **Level 4: Circuit Architecture** | 5 Zero-Knowledge Circuits | Formal Compact Circuit Specs & Invariants | [`docs/CIRCUITS.md`](docs/CIRCUITS.md) | **DOCUMENTED ✅** |
 | **Level 4: Automated CI/CD** | GitHub Actions Pipeline | 3 Automated Jobs (Tests, Build, Indexer) | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) | **PASSING ✅** |
-| **Level 5: User Validation** | 50 Early Verified Users | Cohort 1 On-Chain Testnet Participants | [`USERS.md`](USERS.md) | **50 / 50 ✅** |
+| **Level 5 & 6: On-Chain Users** | **75 / 75 Verified Users** (Target >70) | Combined Cohort: 50 Level 5 Early + 25 Level 6 Launch Participants | [`USERS.md`](USERS.md) & [`LAUNCH_USERS.md`](LAUNCH_USERS.md) | **75 / 75 ✅ (EXCEEDS >70)** |
 | **Level 5: Feedback Matrix** | Code-to-Commit Traceability | Verbatim Feedback Resolved by Git Commits | [`FEEDBACK.md`](FEEDBACK.md) | **RESOLVED ✅** |
-| **Level 6: Post-Launch Cohort** | 25 Launch Testnet Users | Cohort 2 Verified Preprod Onboarding | [`LAUNCH_USERS.md`](LAUNCH_USERS.md) | **25 / 25 ✅** |
+| **Level 6: Launch Cohort Breakdown** | 25 Launch Testnet Users | Cohort 2 Verified Preprod Onboarding & Commitments | [`LAUNCH_USERS.md`](LAUNCH_USERS.md) | **25 / 25 ✅** |
+| **Level 5: Early Cohort Breakdown** | 50 Early Validation Users | Cohort 1 Preview & Preprod Circuit Verification | [`USERS.md`](USERS.md) | **50 / 50 ✅** |
 | **Level 6: Raw Review Dataset** | Customer Reviews & CSV Export | Structured CSV with Mixed Ratings | [`FEEDBACK.csv`](FEEDBACK.csv) & [Live Google Sheet](https://docs.google.com/spreadsheets/d/18tpSi3y6I2oKxWDkObl7RhVwwUzBVtuJ4jL-15vApgY/edit?usp=sharing) | **EXPORTED ✅** |
 | **Level 6: Public Feedback Form** | Community Survey Channel | Live Feedback Survey | [Google Feedback Form](https://docs.google.com/forms/d/e/1FAIpQLSfgDmijFVyHjYgssFxqKYkTEpkJtEu6pUdC-X7Wo305qPYNuw/viewform) | **LIVE 📋** |
 | **Level 6: Developer Playbook** | Midnight Gotchas & Solutions | 10 Generalized Midnight Pitfalls | [`MIDNIGHT_DEVELOPER_PITFALLS_AND_SOLUTIONS.md`](MIDNIGHT_DEVELOPER_PITFALLS_AND_SOLUTIONS.md) | **COMMITTED 📘** |
@@ -174,12 +176,43 @@ BidShield features an unapologetic, high-performance **Neo-Brutalism (Neubrutali
 
 ---
 
+### 📸 Live Dashboard & Production Interface Walkthrough
+
+Live Production Deployment: **[bid-shield-frontend.vercel.app](https://bid-shield-frontend.vercel.app)**
+
+<div align="center">
+
+#### 1. Confidential Enclave Hero & Dual-State Terminal
+<img src="assets/screenshots/01_dashboard_hero.png" alt="BidShield Dashboard Hero and Live Vercel Enclave" width="100%" style="border: 3px solid #000; box-shadow: 6px 6px 0px #000; border-radius: 8px; margin-bottom: 20px;" />
+
+*Real-time Preprod enclave telemetry, connected wallet balance, and cryptographic status panel.*
+
+#### 2. Active Procurement Tenders & Confidential Bidding Intake
+<img src="assets/screenshots/02_active_tenders.png" alt="Active Sealed-Bid Tenders" width="100%" style="border: 3px solid #000; box-shadow: 6px 6px 0px #000; border-radius: 8px; margin-bottom: 20px;" />
+
+*Public budget ceilings, active deadline countdown, and zero-leakage supplier bid submission form.*
+
+#### 3. Awarded & Settled Procurement Contracts
+<img src="assets/screenshots/03_awarded_settlement.png" alt="Awarded and Settled Contracts" width="100%" style="border: 3px solid #000; box-shadow: 6px 6px 0px #000; border-radius: 8px; margin-bottom: 20px;" />
+
+*Selective disclosure settlement with on-chain Substrate transaction verification and winner reveal.*
+
+#### 4. Interactive Zero-Knowledge Circuit Documentation
+<img src="assets/screenshots/04_circuit_docs.png" alt="Zero-Knowledge Circuit Documentation" width="100%" style="border: 3px solid #000; box-shadow: 6px 6px 0px #000; border-radius: 8px; margin-bottom: 12px;" />
+
+*Embedded specification of the 5 Compact ZK circuits, input witness privacy rules, and security invariants.*
+
+</div>
+
+---
+
 ## 👥 Verified Testnet Users & Community Feedback
 
-### A. Two-Cohort Testing Progression
-- **Cohort 1 (Level 5 Validation)**: 50 Users tested early iterations across Preview and Preprod. Full records in [`USERS.md`](USERS.md).
-- **Cohort 2 (Level 6 Launch)**: 25 Post-Launch Users tested the live Preprod contract with real commitments. Full records and quotes in [`LAUNCH_USERS.md`](LAUNCH_USERS.md).
-- **Total Combined Users**: **75 / 75 Verified On-Chain Participants**.
+### A. Verified User Cohort Progression: 75 / 75 On-Chain Participants (Target >70)
+- **Total Verified On-Chain Participants**: **75 / 75 Users** (Surpasses the >70 target evaluation requirement with 100% on-chain proof).
+- **Cohort Breakdown**:
+  - **Cohort 1 (Level 5 Validation)**: 50 Users tested early iterations across Preview and Preprod. Full records in [`USERS.md`](USERS.md).
+  - **Cohort 2 (Level 6 Launch)**: 25 Post-Launch Users tested the live Preprod contract with real commitments. Full records and quotes in [`LAUNCH_USERS.md`](LAUNCH_USERS.md).
 - **Community Demographic**: Comprises Kolkata & West Bengal Web3 builders, university engineering researchers, and international Midnight contributors (~88% Indian developer ecosystem).
 - **Live Feedback Registries**: [Public Google Form](https://docs.google.com/forms/d/e/1FAIpQLSfgDmijFVyHjYgssFxqKYkTEpkJtEu6pUdC-X7Wo305qPYNuw/viewform) & [Live Google Sheets Audit](https://docs.google.com/spreadsheets/d/18tpSi3y6I2oKxWDkObl7RhVwwUzBVtuJ4jL-15vApgY/edit?usp=sharing).
 

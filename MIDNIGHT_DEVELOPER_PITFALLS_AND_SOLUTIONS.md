@@ -28,7 +28,13 @@ fixes detailed in the Midnight Developer Playbook (MIDNIGHT_DEVELOPER_PITFALLS_A
 7. [DApp Connector Dynamic Discovery (`window.midnight`)](#7-dapp-connector-dynamic-discovery-windowmidnight)
 8. [Strict Monorepo CI/CD & TypeScript Pipeline Safety](#8-strict-monorepo-cicd--typescript-pipeline-safety)
 9. [Compact Smart Contract Circuit Optimization](#9-compact-smart-contract-circuit-optimization)
-10. [Pre-Flight Checklist for Level 6 Submissions](#10-pre-flight-checklist-for-level-6-submissions)
+10. [Pre-Flight Checklist for Challenge & Production Submissions](#10-pre-flight-checklist-for-challenge--production-submissions)
+11. [Wallet Address Object Serialization Trap (`[object Object]`)](#11-wallet-address-object-serialization-trap-object-object)
+12. [Wallet Synchronization State & Silent Proving Timeouts](#12-wallet-synchronization-state--silent-proving-timeouts)
+13. [Browser Console Noise & User Rejection Interception (`4001`)](#13-browser-console-noise--user-rejection-interception-4001)
+14. [The Zero-Knowledge Block Explorer Indexing Paradox](#14-the-zero-knowledge-block-explorer-indexing-paradox)
+15. [Client-Side Witness Cryptography & Browser Vite/ESM Compatibility](#15-client-side-witness-cryptography--browser-viteesm-compatibility)
+16. [🤖 Master System Prompt for New Midnight Projects](#16--master-system-prompt-for-new-midnight-projects)
 
 ---
 
@@ -397,3 +403,250 @@ Before submitting any Midnight Builder Challenge or hackathon repository, verify
 - [ ] **Privacy Preservation**: Confidential witnesses (passwords, bids, credit scores, salts) are never exposed to public ledger state variables.
 - [ ] **Feedback Resolution**: User feedback survey exported to `FEEDBACK.csv` with mapped Git commits.
 - [ ] **Clean Local Git History**: Atomic, descriptive commits following the Conventional Commits specification.
+
+---
+
+## 11. Wallet Address Object Serialization Trap (`[object Object]`)
+
+### ❌ The Problem
+When integrating Midnight DApp Connectors (1AM Wallet or Lace), frontend address display badges or buttons render as:
+```text
+mn_addr_preprod1[object Object]
+// or
+[object Object]
+```
+Or throwing runtime errors:
+```text
+TypeError: wallet.address.slice is not a function
+```
+
+### 🔍 Root Cause
+Recent updates to Midnight wallet connectors (specifically 1AM Wallet and multi-asset account abstractions) return rich address structures rather than plain strings when querying connected accounts:
+```typescript
+// Connector returns:
+{
+  address: "mn_addr_preprod1yrl238...",
+  bech32: "mn_addr_preprod1yrl238...",
+  roles: ["Zswap", "NightExternal", "Dust"]
+}
+```
+If your frontend code assigns this directly to a string state or uses string interpolation `${wallet.address}`, JavaScript invokes `.toString()`, producing `"[object Object]"`.
+
+### ✅ The Solution
+Implement a defensive address extractor function across your wallet hook and display components:
+
+```typescript
+/**
+ * Safely extracts a clean Bech32 string from any Midnight address payload
+ * handles plain strings, nested address objects, or array responses.
+ */
+export function extractBech32Address(addr: unknown): string {
+  if (!addr) return '';
+  if (typeof addr === 'string') return addr;
+  if (typeof addr === 'object' && addr !== null) {
+    const candidate = addr as Record<string, unknown>;
+    if (typeof candidate.address === 'string') return candidate.address;
+    if (typeof candidate.bech32 === 'string') return candidate.bech32;
+    if (typeof candidate.unshieldedAddress === 'string') return candidate.unshieldedAddress;
+    if (Array.isArray(addr) && addr.length > 0) return extractBech32Address(addr[0]);
+  }
+  return String(addr);
+}
+
+// In your UI component:
+export const AddressChip: React.FC<{ rawAddress: unknown }> = ({ rawAddress }) => {
+  const clean = extractBech32Address(rawAddress);
+  if (!clean) return <span>Not Connected</span>;
+  return <span>{clean.slice(0, 14)}...{clean.slice(-6)}</span>;
+};
+```
+
+---
+
+## 12. Wallet Synchronization State & Silent Proving Timeouts
+
+### ❌ The Problem
+A user connects their wallet, immediately clicks a button to execute a contract circuit transaction, and the app either hangs indefinitely with a spinner or fails with:
+```text
+WalletNotSynchronizedException: Cannot balance transaction while synchronizing with Midnight indexer.
+```
+
+### 🔍 Root Cause
+Unlike transparent blockchains where account state is a simple nonce/balance lookup, Midnight wallets must sync **shielded UTXO note commitments and nullifiers** with the Substrate indexer upon unlock. This synchronization takes between 2 to 15 seconds depending on connection latency and block height. Attempting to build or balance a transaction during this window fails.
+
+### ✅ The Solution
+1. **Subscribe to Wallet Sync Observable**: Check synchronization status before enabling transaction buttons:
+```typescript
+export function useWalletSyncStatus(walletInstance: any) {
+  const [isSynced, setIsSynced] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!walletInstance?.state) return;
+    const sub = walletInstance.state().subscribe({
+      next: (state: any) => {
+        // Check if sync status is fully caught up to latest block
+        setIsSynced(state.syncProgress?.isSynced ?? true);
+      },
+    });
+    return () => sub.unsubscribe();
+  }, [walletInstance]);
+
+  return isSynced;
+}
+```
+2. **Provide Clear Visual Sync Telemetry**:
+   - If syncing, show a subtle pulse badge: `Syncing with Midnight ledger (#2.6M)...`
+   - Disable submission buttons with a tooltip: `"Please wait for shielded wallet synchronization to complete"`.
+
+---
+
+## 13. Browser Console Noise & User Rejection Interception (`4001`)
+
+### ❌ The Problem
+When evaluators or testers click "Connect Wallet" and then click "Cancel" or close the extension popup, browser extensions throw an unhandled promise rejection:
+```text
+Uncaught (in promise) { code: 4001, message: "User rejected the request." }
+```
+Evaluators inspecting the DevTools console see bright red error logs and assume the dApp has unhandled exceptions.
+
+### ✅ The Solution
+Intercept user cancellations at the connector boundary and classify them as clean, neutral events:
+
+```typescript
+export async function connectMidnightWallet(provider: any): Promise<boolean> {
+  try {
+    const api = await provider.enable();
+    return !!api;
+  } catch (err: any) {
+    const errorMsg = (err?.message || '').toLowerCase();
+    const isUserCancel = 
+      err?.code === 4001 || 
+      err?.code === 'USER_REJECTED' ||
+      errorMsg.includes('reject') || 
+      errorMsg.includes('cancel') ||
+      errorMsg.includes('closed');
+
+    if (isUserCancel) {
+      // Clean neutral logging — zero red console errors
+      console.info('ℹ️ User cancelled wallet connection dialog.');
+      return false;
+    }
+
+    console.warn('⚠️ Legitimate wallet connection error:', err?.message || err);
+    return false;
+  }
+}
+```
+
+---
+
+## 14. The Zero-Knowledge Block Explorer Indexing Paradox
+
+### ❌ The Problem
+Testers and evaluators submit a transaction, copy their wallet address, search it on `midnightexplorer.com` or Subscan, and complain:
+> *"My address page says 0 Transactions! The dApp did not execute on-chain!"*
+
+### 🔍 Root Cause
+In Ethereum/Solidity, the `from` address is public and indexed on Etherscan.  
+In Midnight's **Dual-State Zero-Knowledge Architecture**:
+- Private witness data (identities, secrets, bid amounts) stays in the user's local RAM.
+- Contract extrinsics interact directly with the Compact smart contract address using zero-knowledge proofs.
+- Because the transaction does not publicly bind the user's unshielded address to the contract interaction, **block explorers do NOT index the contract transaction under the caller's address**.
+- Contract state mutations are indexed **under the Contract Address itself**.
+
+### ✅ The Solution
+1. **Document Prominently for Evaluators**: Include an explicit Evaluator Notice in the README and UI:
+   > **How to Verify Execution**: Inspect the **Contract Actions** on the Midnight Explorer contract page and verify the on-chain Substrate transaction hashes, where atomic increments and state transitions are recorded.
+2. **Link Direct to Contract & Extrinsic**: Always render links directly to `midnightexplorer.com/contracts/[contractAddress]` and the extrinsic hash, rather than the user's personal address.
+
+---
+
+## 15. Client-Side Witness Cryptography & Browser Vite/ESM Compatibility
+
+### ❌ The Problem
+When hashing private witnesses or generating salts in frontend React/Vite applications, importing Node.js `crypto` or `Buffer` produces browser bundle errors:
+```text
+Uncaught ReferenceError: Buffer is not defined
+// or
+Uncaught ReferenceError: process is not defined
+```
+
+### ✅ The Solution
+Use native Web Crypto APIs (`window.crypto.subtle`) and modern ES TypedArrays, completely avoiding legacy Node polyfills:
+
+```typescript
+// 1. Browser-Native SHA-256 Hashing
+export async function sha256Hex(message: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(message);
+  const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// 2. Cryptographic Salt Generation (32-byte hex entropy)
+export function generateCryptographicSalt(): string {
+  const array = new Uint8Array(32);
+  window.crypto.getRandomValues(array);
+  return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// 3. Compact-Compatible Commitment Calculation
+export async function computeCompactCommitment(value: number | bigint, saltHex: string): Promise<string> {
+  const payload = `${value}:${saltHex}`;
+  return sha256Hex(payload);
+}
+```
+
+---
+
+## 16. 🤖 Master System Prompt for New Midnight Projects
+
+> [!TIP]
+> **Copy, paste, and save this prompt for the next Midnight project!**  
+> Feed this prompt directly into your AI coding assistant (Claude, ChatGPT, Gemini, Antigravity) at the very start of any new project on Midnight Network.
+
+````markdown
+You are an expert Midnight Network and Compact smart contract engineer. You are building a production-grade decentralized application on Midnight Network using Compact 0.5.2, Midnight JS SDK, Substrate, and TypeScript/React.
+
+You MUST follow these battle-tested architectural invariants and rules without exception:
+
+### 1. Dual-State Privacy Invariants
+- Private state (witnesses, secrets, passwords, financial amounts, private keys, salts) MUST NEVER be passed into public ledger state variables or emitted in plaintext events.
+- All confidential intake circuits MUST use cryptographic commitments (SHA-256 / persistentHash). The public ledger receives ONLY the 32-byte commitment hash.
+- Enforce selective disclosure: Unsuccessful or confidential competing records must remain permanently sealed on-chain. Only reveal verified outcomes.
+
+### 2. Compact Circuit Rules (Compact >= 0.20 / 0.5.2)
+- Explicit arithmetic bounds: Arithmetic on counters must explicitly cast back to bounds (e.g. `(counter + 1) as Uint<64>`).
+- Enforce initialization guards: Every contract must have an `isInitialized: Cell<Boolean>` checked with `assert(!isInitialized, "Already initialized")` to prevent re-initialization exploits.
+- Standardize all external identifiers and hashes to fixed 32-byte arrays (`Bytes<32>`).
+- Define explicit witness functions in Compact for all off-chain private inputs:
+  `witness getPrivateSecret(): Uint<64>;`
+  `witness getPrivateSalt(): Bytes<32>;`
+
+### 3. Explorer & Address Formatting Invariants
+- NEVER prefix contract addresses with `0x`. Smart contracts on Midnight are 64-character lowercase hex strings (e.g. `fc67e2850565...`).
+- User addresses are Bech32 (`mn_addr_preprod1...` or `mn_addr_preview1...`).
+- Always use PLURAL endpoints for Midnight Explorer URLs:
+  - Contracts: `https://[network].midnightexplorer.com/contracts/[address]`
+  - Transactions: `https://[network].midnightexplorer.com/transactions/[txHash]`
+  (Singular `/contract/` or `/tx/` returns HTTP 404).
+
+### 4. DUST Gas & Fee Balancing Rules
+- In transaction configuration (`wallet.ts`), NEVER set `additionalFeeOverhead` to 300 Trillion Specks. Use realistic testnet overhead (`costParameters: { additionalFeeOverhead: 10_000_000n, feeBlocksMargin: 5 }`).
+- Remember: 1 DUST = 1,000,000 Specks. Ensure operational accounts have registered for DUST generation via `dust.registerKey`.
+
+### 5. Dual-Network Isolation (Preview & Preprod)
+- Support BOTH Midnight Preview and Midnight Preprod testnets seamlessly.
+- Preview RPC: `https://rpc.preview.midnight.network` | Indexer: `https://indexer.preview.midnight.network/api/v4/graphql`
+- Preprod RPC: `https://rpc.preprod.midnight.network` | Indexer: `https://indexer.preprod.midnight.network/api/v4/graphql`
+- Contract addresses differ between Preview and Preprod. Keep them mapped in a central `NETWORK_CONFIGS` dictionary.
+
+### 6. Frontend & Wallet Connector UX
+- Prevent `[object Object]` bugs: Always normalize wallet addresses with a defensive `extractBech32Address` helper that handles objects (`{ address: string }`) and plain strings.
+- Gracefully handle wallet cancellations: Catch user rejection errors (`err.code === 4001` or "User rejected") and log neutral info rather than dumping red errors in DevTools console.
+- Zero mock fallbacks: Forms must start clean with empty inputs. Provide non-intrusive "Quick Fill" chips beneath inputs for tester convenience.
+- Zero Docker requirement for evaluators: Use browser-native wallet proving (1AM / Lace WASM) rather than forcing evaluators to run local 4GB Docker proof-server containers.
+- Native browser cryptography: Use `window.crypto.subtle` and `window.crypto.getRandomValues()` instead of Node.js `crypto` or `Buffer` to prevent Vite/ESM build breakage.
+````
+
